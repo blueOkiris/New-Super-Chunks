@@ -6,6 +6,10 @@ A remake of a game demo I made called Super Chunks in my new game Engine, Eksedr
 
 The old [Super Chunks](https://github.com/blueOkiris/Super-Chunks)
 
+That project is essentially a remake of an even older game I built in GameMaker 8.1 back in the day. It's ironic because I've based *this* game engine off of Gamemaker 8.1, so I've now come full circle.
+
+The original [Chunks](https://chunksgame.webs.com/)
+
 ## Build and Run
 
 ### Windows
