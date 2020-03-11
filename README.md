@@ -10,7 +10,7 @@ That project is essentially a remake of an even older game I built in GameMaker 
 
 The original [Chunks](https://chunksgame.webs.com/)
 
-<img src="https://github.com/blueOkiris/Eksedra-Engine/blob/master/images/example-image.png" width="640" />
+<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="640" />
 
 ## Build and Run
 
