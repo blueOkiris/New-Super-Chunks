@@ -16,7 +16,6 @@ namespace NewSuperChunks {
 
     public abstract class Solid : GameObject {
         public override void EarlyUpdate(float deltaTime) {}
-        public override void Update(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[] keyState) {}
         public override void OnKeyDown(bool[] keyState) {}
@@ -32,6 +31,15 @@ namespace NewSuperChunks {
         public override void Draw(RenderTarget target, RenderStates states) {
             if(SpriteIndex != null)
                 target.Draw(SpriteIndex);
+        }
+
+        public override void Update(float deltaTime) {
+            if(RunningEngine.CurrentRoom == "title") {
+                X -= 256 * deltaTime;
+
+                if(X + 32 <= 0)
+                    X = 1280 / 2;
+            }
         }
     }
 

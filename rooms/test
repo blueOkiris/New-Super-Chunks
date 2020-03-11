@@ -1,8 +1,7 @@
 new GameRoom(
     new List<GameObject>() {
-        new ControlObject(),
-        new Player(32 + 3 * 64, 720 - 2 * 64),
-        
+        //new ControlObject(),
+        //new Player(1280 / 4, 3 * 720 / 4),
         new AirBlock(32, 720 - 32, BlockType.Middle),
         new AirBlock(32 + 64, 720 - 32, BlockType.Middle),
         new AirBlock(32 + 2 * 64, 720 - 32, BlockType.Top),

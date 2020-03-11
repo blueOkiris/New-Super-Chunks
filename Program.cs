@@ -27,11 +27,12 @@ namespace NewSuperChunks
             Console.WriteLine("Program started!");
 
             Engine engine = new Engine(
-                                1280, 720, "Eksedra Engine", "test", 
+                                1280, 720, "Eksedra Engine", "title", 
                                 new List<Type>() {
                                     typeof(ControlObject),
                                     typeof(Player),
                                     typeof(Rock),
+                                    typeof(AirBlock),
                                     typeof(CloudThrough),
                                     typeof(BlockType)
                                 }, "NewSuperChunks");

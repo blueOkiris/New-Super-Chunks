@@ -6,8 +6,10 @@
  */
 using SFML.Window;
 using SFML.Graphics;
+using SFML.Audio;
 using System;
 using EksedraEngine;
+using SFML.System;
 
 namespace NewSuperChunks {
     public class ControlObject : GameObject {
@@ -17,19 +19,46 @@ namespace NewSuperChunks {
         public override void OnKeyOff(bool[]  keyState) {}
         public override void OnKeyHeld(bool[] keyState) {}
         public override void OnCollision(GameObject other) {}
-        public override void Update(float deltaTime) {}
         public override void OnTimer(int timerIndex) {}
         
         public override void Init() {
             Tag = "Control";
+        }
 
-            RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
-            RunningEngine.Audio["Chunks-Intro-Level"].Play();
+        public override void Update(float deltaTime) {
+            if(RunningEngine.CurrentRoom == "title" && RunningEngine.Audio["Chunks-Title"].Status != SoundStatus.Playing) {
+                RunningEngine.Audio["Chunks-Title"].Loop = true;
+                RunningEngine.Audio["Chunks-Title"].Play();
+            } else if(RunningEngine.CurrentRoom != "title") {
+                RunningEngine.Audio["Chunks-Title"].Loop = false;
+                RunningEngine.Audio["Chunks-Title"].Stop();
+            }
+            
+            if(RunningEngine.CurrentRoom == "test" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
+                RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
+                RunningEngine.Audio["Chunks-Intro-Level"].Play();
+            } else if(RunningEngine.CurrentRoom != "test") {
+                RunningEngine.Audio["Chunks-Intro-Level"].Loop = false;
+                RunningEngine.Audio["Chunks-Intro-Level"].Stop();
+            }
+
+            switch(RunningEngine.CurrentRoom) {
+                case "title":
+                    RunningEngine.Background = Color.Blue;
+                    break;
+
+                default:
+                    RunningEngine.Background = Color.Yellow;
+                    break;
+            }
         }
 
         public override void OnKeyDown(bool[] keyState) {
             if(keyState[(int) Keyboard.Key.Escape])
                 RunningEngine.SetQuit(true);
+
+            if(keyState[(int) Keyboard.Key.Space])
+                RunningEngine.CurrentRoom = "test";
         }
         
         public ControlObject() {
@@ -43,6 +72,14 @@ namespace NewSuperChunks {
             text.FillColor = Color.Black;
 
             target.Draw(text);*/
+
+            if(RunningEngine.CurrentRoom == "title") {
+                Text text = new Text("SUPER CHUNKS", RunningEngine.Fonts["Pixeled"], 36);
+                text.Position = new Vector2f(112, 720 - 64 * 5);
+                text.FillColor = Color.White;
+                
+                target.Draw(text);
+            }
         }
     }
 
@@ -110,6 +147,7 @@ namespace NewSuperChunks {
         }
 
         public override void Update(float deltaTime) {
+
             //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
             if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
                 X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
@@ -173,6 +211,10 @@ namespace NewSuperChunks {
                 ImageScaleX = Math.Abs(ImageScaleX);
             else if(HSpeed < 0)
                 ImageScaleX = -Math.Abs(ImageScaleX);
+            
+            
+            if(RunningEngine.CurrentRoom == "title")
+                SpriteIndex = PlayerRun;
 
             // Move the view
             if(X - RunningEngine.ViewPort.Width / 2 < 0)
@@ -191,6 +233,11 @@ namespace NewSuperChunks {
         }
 
         public override void OnKeyDown(bool[] keyState) {
+            if(RunningEngine.CurrentRoom == "title") {
+                SpriteIndex = PlayerRun;
+                return;
+            }
+
             if(keyState[(int) Keyboard.Key.Up] && IsGrounded) {
                 VSpeed = -JumpSpeed;
                 IsGrounded = false;
@@ -200,6 +247,11 @@ namespace NewSuperChunks {
         }
 
         public override void OnKeyHeld(bool[] keyState) {
+            if(RunningEngine.CurrentRoom == "title") {
+                SpriteIndex = PlayerRun;
+                return;
+            }
+
             if(keyState[(int) Keyboard.Key.Left])
                 HSpeed = -MoveSpeed;
             else if(keyState[(int) Keyboard.Key.Right])
