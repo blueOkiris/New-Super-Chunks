@@ -4,6 +4,8 @@
 
 A remake of a game demo I made called Super Chunks in my new game Engine, Eksedra Engine
 
+The old [Super Chunks] (https://github.com/blueOkiris/Super-Chunks)
+
 ## Build and Run
 
 ### Windows
