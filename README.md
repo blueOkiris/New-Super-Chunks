@@ -14,11 +14,15 @@ The original [Chunks](https://chunksgame.webs.com/)
 
 ### Windows
 
-In command line run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true & move .\bin\Release\netcoreapp3.1\win-x64\publish\New\ Super\ Chunks .\`
+In command line run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true & move .\bin\Release\netcoreapp3.1\win-x64\publish\New\ Super\ Chunks.exe .\`
+
+Then there will be an executable 'New Super Chunks.exe'
 
 ### Linux
 
 In a terminal run `export PublishSingleFile=true && dotnet publish -c Release -r linux-x64 && mv ./bin/Release/netcoreapp3.1/linux-x64/publish/New\ Super\ Chunks ./`
+
+Then there will be a binary calle 'New Super Chunks'
 
 ## Credits
 
