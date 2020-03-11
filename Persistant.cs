@@ -130,34 +130,34 @@ namespace NewSuperChunks {
 
             // Horizontal collision
             GameObject other = null;
-            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Rock), (self, otra) => true, ref other)) {
+            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid), (self, otra) => true, ref other)) {
                 X = other.X + other.MaskX - (MaskX + MaskWidth);
                 HSpeed = 0;
             }
             
-            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Rock), (self, otra) => true, ref other)) {
+            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid), (self, otra) => true, ref other)) {
                 X = other.X + other.MaskX + other.MaskWidth - MaskX;
                 HSpeed = 0;
             }
 
             // Vertical Collision
-            if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Rock), 
+            if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Solid), 
                     (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
-            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(JumpThrough), 
+            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(CloudThrough), 
                     (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
-            } else if(!RunningEngine.CheckCollision(X, Y + 1, this, typeof(Rock), 
+            } else if(!RunningEngine.CheckCollision(X, Y + 1, this, typeof(Solid), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)
-                    && !RunningEngine.CheckCollision(X, Y + 1, this, typeof(JumpThrough), 
+                    && !RunningEngine.CheckCollision(X, Y + 1, this, typeof(CloudThrough), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
                 IsGrounded = false;
             
-            if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Rock), 
+            if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Solid), 
                     (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
                 Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
                 VSpeed = 0;

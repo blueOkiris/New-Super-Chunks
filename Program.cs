@@ -32,7 +32,8 @@ namespace NewSuperChunks
                                     typeof(ControlObject),
                                     typeof(Player),
                                     typeof(Rock),
-                                    typeof(JumpThrough)
+                                    typeof(CloudThrough),
+                                    typeof(BlockType)
                                 }, "NewSuperChunks");
 
             Console.WriteLine("Running engine!");
