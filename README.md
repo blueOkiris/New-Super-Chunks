@@ -22,7 +22,7 @@ Then there will be an executable 'New Super Chunks.exe'
 
 In a terminal run `export PublishSingleFile=true && dotnet publish -c Release -r linux-x64 && mv ./bin/Release/netcoreapp3.1/linux-x64/publish/New\ Super\ Chunks ./`
 
-Then there will be a binary calle 'New Super Chunks'
+Then there will be a binary called 'New Super Chunks'
 
 ## Credits
 
