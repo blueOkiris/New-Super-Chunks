@@ -1,4 +1,4 @@
-# New-Super-Chunks
+# New Super Chunks
 
 ## Description
 
