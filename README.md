@@ -18,11 +18,17 @@ In command line run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=t
 
 Then there will be an executable 'New Super Chunks.exe'
 
-### Linux
+### Linux (x64)
 
 In a terminal run `export PublishSingleFile=true && dotnet publish -c Release -r linux-x64 && mv ./bin/Release/netcoreapp3.1/linux-x64/publish/New\ Super\ Chunks ./`
 
 Then there will be a binary called 'New Super Chunks'
+
+### Linux (Raspberry Pi)
+
+Assuming you have properly installed dotnet core 3.1 ARM for Raspberry Pi,
+
+Like Linux x64 `export PublishSingleFile=true && dotnet publish -c Release -r linux-arm && mv ./bin/Release/netcoreapp3.1/linux-arm/publish/New\ Super\ Chunks ./`
 
 ## Credits
 
