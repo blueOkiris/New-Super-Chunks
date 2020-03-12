@@ -46,17 +46,18 @@ namespace NewSuperChunks {
                 RunningEngine.Audio["Chunks-Title"].Stop();
             }
             
-            if(RunningEngine.CurrentRoom == "test" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
+            if(RunningEngine.CurrentRoom == "grass-world" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
                 RunningEngine.Audio["Chunks-Intro-Level"].Volume = 50;
                 RunningEngine.Audio["Chunks-Intro-Level"].Play();
-            } else if(RunningEngine.CurrentRoom != "test") {
+            } else if(RunningEngine.CurrentRoom != "grass-world") {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = false;
                 RunningEngine.Audio["Chunks-Intro-Level"].Stop();
             }
 
             switch(RunningEngine.CurrentRoom) {
                 case "title":
+                case "grass-world":
                     RunningEngine.Background = new Color(102, 161, 255);
                     break;
 
@@ -169,7 +170,7 @@ namespace NewSuperChunks {
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
             MaskX = -20;
-            MaskY = -30;
+            MaskY = -32;
             MaskWidth = 40;
             MaskHeight = 52;
 
@@ -208,12 +209,15 @@ namespace NewSuperChunks {
 
             // Horizontal collision
             GameObject other = null;
-            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid), (self, otra) => true, ref other)) {
+            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
                 X = other.X + other.MaskX - (MaskX + MaskWidth);
                 HSpeed = 0;
             }
             
-            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid), (self, otra) => true, ref other)) {
+            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
+                //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
                 X = other.X + other.MaskX + other.MaskWidth - MaskX;
                 HSpeed = 0;
             }
