@@ -69,8 +69,11 @@ namespace NewSuperChunks {
                 //Console.WriteLine("CLICK!");
                 Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
                 if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
-                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128)
-                    RunningEngine.CurrentRoom = "test";
+                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128) {
+                    RunningEngine.FindGameObjectsWithTag("Player")[0].X = 32 + 64 * 9.5f;
+                    RunningEngine.FindGameObjectsWithTag("Player")[0].Y = 27 * 64;
+                    RunningEngine.CurrentRoom = "grass-world";
+                }
             }
         }
 
@@ -118,13 +121,16 @@ namespace NewSuperChunks {
         private float JumpSpeed = 900;
         private bool IsGrounded = false;
 
+        private bool DoubleJumpUnlocked;
+        private bool DoubleJumped = false;
+
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnTimer(int timerIndex) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump;
 
         public Player(int x, int y) {
             X = x;
@@ -137,24 +143,28 @@ namespace NewSuperChunks {
             Depth = 0;
 
             PlayerStand = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(0, 0, 64, 64)
+                                                new IntRect(0, 4, 64, 64)
                                             });
             PlayerStand.Smooth = false;
             PlayerJump = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(72, 0, 64, 64)
+                                                new IntRect(72, 4, 64, 64)
                                             });
             PlayerJump.Smooth = false;
             PlayerFall = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(144, 0, 64, 64)
+                                                new IntRect(144, 4, 64, 64)
                                             });
             PlayerFall.Smooth = false;
             PlayerRun = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(216, 0, 64, 64),
-                                                new IntRect(288, 0, 64, 64),
-                                                new IntRect(364, 0, 64, 64),
-                                                new IntRect(432, 0, 64, 64),
+                                                new IntRect(216, 4, 64, 64),
+                                                new IntRect(288, 4, 64, 64),
+                                                new IntRect(364, 4, 64, 64),
+                                                new IntRect(432, 4, 64, 64),
                                             });
             PlayerRun.Smooth = false;
+            PlayerSuperJump = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(652, 4, 64, 64)
+                                            });
+            PlayerSuperJump.Smooth = false;
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
@@ -162,6 +172,9 @@ namespace NewSuperChunks {
             MaskY = -30;
             MaskWidth = 40;
             MaskHeight = 52;
+
+            // All false when game is done
+            DoubleJumpUnlocked = true;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
@@ -175,7 +188,6 @@ namespace NewSuperChunks {
         }
 
         public override void Update(float deltaTime) {
-
             //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
             if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
                 X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
@@ -205,35 +217,36 @@ namespace NewSuperChunks {
                 X = other.X + other.MaskX + other.MaskWidth - MaskX;
                 HSpeed = 0;
             }
-
-            // Vertical Collision
-            if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Solid), 
+            
+            if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
                     (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
-            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(CloudThrough), 
+            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(CloudThrough), 
                     (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
-            } else if(!RunningEngine.CheckCollision(X, Y + 1, this, typeof(Solid), 
+            } else if(!RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(Solid), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)
-                    && !RunningEngine.CheckCollision(X, Y + 1, this, typeof(CloudThrough), 
+                    && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(CloudThrough), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
                 IsGrounded = false;
             
-            if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Solid), 
+            if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
                     (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
                 Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
                 VSpeed = 0;
             }
 
             // Animate
-            if(IsGrounded)
+            if(IsGrounded) {
                 SpriteIndex = Math.Abs(HSpeed) > 0 ? PlayerRun : PlayerStand;
-            else
-                SpriteIndex = VSpeed > 0 ? PlayerFall : PlayerJump;
+
+                DoubleJumped = false;
+            } else
+                SpriteIndex = VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump);
             
             if(HSpeed > 0)
                 ImageScaleX = Math.Abs(ImageScaleX);
@@ -267,9 +280,13 @@ namespace NewSuperChunks {
             }
 
             if(keyState[(int) Keyboard.Key.Up] && IsGrounded) {
-                VSpeed = -JumpSpeed;
-                IsGrounded = false;
+                    VSpeed = -JumpSpeed;
+                    IsGrounded = false;
 
+                    RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
+            } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped) {
+                VSpeed = -JumpSpeed;
+                DoubleJumped = true;
                 RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
             }
         }

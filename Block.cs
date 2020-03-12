@@ -11,7 +11,7 @@ namespace NewSuperChunks {
         Single = 0,
         Middle = 5,
         TopLeft = 1, TopRight = 2, BottomLeft = 6, BottomRight = 7,
-        Top = 3, Right = 4, Bottom = 8, Left = 9
+        Top = 3, Right = 4, Bottom = 9, Left = 8
     }
 
     public abstract class Solid : GameObject {
@@ -43,6 +43,29 @@ namespace NewSuperChunks {
         }
     }
 
+    public class Box : Solid {
+        public Box(int x, int y) : base() {
+            X = x;
+            Y = y;
+        }
+
+        public override void Init() {
+            Tag = "Box";
+            Depth = 1;
+            
+            ImageSpeed = 0;
+            ImageIndex = 0;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 64;
+
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex.Smooth = false;
+        }
+    }
+
     public class GrassBlock : Solid {
         public BlockType BlockPosition;
 
@@ -53,7 +76,7 @@ namespace NewSuperChunks {
             BlockPosition = blockType;
         }
 
-        public override void Init(){
+        public override void Init() {
             Tag = "GrassBlock";
             Depth = 1;
             
@@ -104,7 +127,7 @@ namespace NewSuperChunks {
             BlockPosition = blockType;
         }
 
-        public override void Init(){
+        public override void Init() {
             Tag = "WaterBlock";
             Depth = 1;
             
@@ -155,7 +178,7 @@ namespace NewSuperChunks {
             BlockPosition = blockType;
         }
 
-        public override void Init(){
+        public override void Init() {
             Tag = "AirBlock";
             Depth = 1;
             
