@@ -21,7 +21,12 @@ The original [Chunks](https://chunksgame.webs.com/)
 
 ### Windows
 
-In command line run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true & move .\bin\Release\netcoreapp3.1\win-x64\publish\New\ Super\ Chunks.exe .\`
+In command line run
+
+```
+dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true
+move -Force ".\bin\Release\netcoreapp3.1\win-x64\publish\New Super Chunks.exe" .\
+```
 
 Then there will be an executable 'New Super Chunks.exe'
 

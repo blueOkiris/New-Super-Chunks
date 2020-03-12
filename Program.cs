@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using EksedraEngine;
+using SFML.Graphics;
 
 namespace NewSuperChunks
 {
@@ -26,6 +27,7 @@ namespace NewSuperChunks
 
             Console.WriteLine("Program started!");
 
+            EksedraSprite loadSprite = new EksedraSprite(new Texture("images/blueokirislogo-2018.png"), new IntRect[] { new IntRect(0, 0, 800, 600) });
             Engine engine = new Engine(
                                 1280, 720, "Eksedra Engine", "title", 
                                 new List<Type>() {
@@ -34,7 +36,7 @@ namespace NewSuperChunks
                                     typeof(AirBlock),
                                     typeof(CloudThrough),
                                     typeof(BlockType)
-                                }, "NewSuperChunks");
+                                }, "NewSuperChunks", loadSprite);
 
             Console.WriteLine("Running engine!");
             engine.Run();
