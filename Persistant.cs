@@ -122,16 +122,17 @@ namespace NewSuperChunks {
         private float JumpSpeed = 900;
         private bool IsGrounded = false;
 
-        private bool DoubleJumpUnlocked;
+        private bool DoubleJumpUnlocked, PunchUnlocked;
         private bool DoubleJumped = false;
+        public bool CanPunch = false, Punched = false;
+        private float PunchTime = 0.175f, PunchSpeed = 1800;
 
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[]  keyState) {}
-        public override void OnTimer(int timerIndex) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch;
 
         public Player(int x, int y) {
             X = x;
@@ -166,6 +167,10 @@ namespace NewSuperChunks {
                                                 new IntRect(652, 4, 64, 64)
                                             });
             PlayerSuperJump.Smooth = false;
+            PlayerPunch = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(508, 4, 64, 64)
+                                            });
+            PlayerPunch.Smooth = false;
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
@@ -176,6 +181,7 @@ namespace NewSuperChunks {
 
             // All false when game is done
             DoubleJumpUnlocked = true;
+            PunchUnlocked = true;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
@@ -204,8 +210,11 @@ namespace NewSuperChunks {
                 VSpeed = 0;
             }
             
-            if(VSpeed < MaxVSpeed && !IsGrounded)
+            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched)
                 VSpeed += Gravity * deltaTime;
+
+            if(Punched)
+                HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
 
             // Horizontal collision
             GameObject other = null;
@@ -245,10 +254,14 @@ namespace NewSuperChunks {
             }
 
             // Animate
-            if(IsGrounded) {
+            if(Punched)
+                SpriteIndex = PlayerPunch;
+            else if(IsGrounded) {
                 SpriteIndex = Math.Abs(HSpeed) > 0 ? PlayerRun : PlayerStand;
 
                 DoubleJumped = false;
+                if(!Punched)
+                    CanPunch = true;
             } else
                 SpriteIndex = VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump);
             
@@ -293,6 +306,17 @@ namespace NewSuperChunks {
                 DoubleJumped = true;
                 RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
             }
+
+            if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch) {
+                Timers[0] = PunchTime;
+                Punched = true;
+                CanPunch = false;
+            }
+        }
+
+        public override void OnTimer(int timerIndex) {
+            if(timerIndex == 0)
+                Punched = false;
         }
 
         public override void OnKeyHeld(bool[] keyState) {
