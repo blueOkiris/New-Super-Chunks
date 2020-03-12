@@ -29,7 +29,7 @@ namespace NewSuperChunks
 
             EksedraSprite loadSprite = new EksedraSprite(new Texture("images/blueokirislogo-2018.png"), new IntRect[] { new IntRect(0, 0, 800, 600) });
             Engine engine = new Engine(
-                                1280, 720, "Eksedra Engine", "title", 
+                                1280, 720, "New Super Chunks", "title", 
                                 new List<Type>() {
                                     typeof(ControlObject),
                                     typeof(Player),
