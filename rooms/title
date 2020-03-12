@@ -22,6 +22,9 @@ new GameRoom(
         new GrassBlock(32 + 17 * 64, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 18 * 64, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 19 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 20 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 21 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 22 * 64, 720 - 32, BlockType.Top),
     },
     new Vector2f(1280, 720)
 )
