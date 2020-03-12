@@ -20,9 +20,20 @@ namespace NewSuperChunks {
         public override void OnKeyHeld(bool[] keyState) {}
         public override void OnCollision(GameObject other) {}
         public override void OnTimer(int timerIndex) {}
+
+        EksedraSprite PlayButtonOff, PlayButtonOn;
         
         public override void Init() {
             Tag = "Control";
+
+            PlayButtonOff = new EksedraSprite(RunningEngine.Images["play_button"], new IntRect[] { new IntRect(0, 0, 512, 128) });
+            PlayButtonOn = new EksedraSprite(RunningEngine.Images["play_button"], new IntRect[] { new IntRect(0, 128, 512, 128) });
+            PlayButtonOff.MoveTo(1280 / 4, 3 * 720 / 4);
+            PlayButtonOff.Smooth = true;
+            PlayButtonOff.SetScale(0.5f, 0.5f);
+            PlayButtonOn.MoveTo(1280 / 4, 3 * 720 / 4);
+            PlayButtonOn.Smooth = true;
+            PlayButtonOn.SetScale(0.5f, 0.5f);
         }
 
         public override void Update(float deltaTime) {
@@ -53,14 +64,22 @@ namespace NewSuperChunks {
                     RunningEngine.Background = Color.Yellow;
                     break;
             }
+
+            if(Mouse.IsButtonPressed(Mouse.Button.Left)) {
+                //Console.WriteLine("CLICK!");
+                Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
+                if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
+                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128)
+                    RunningEngine.CurrentRoom = "test";
+            }
         }
 
         public override void OnKeyDown(bool[] keyState) {
             if(keyState[(int) Keyboard.Key.Escape])
                 RunningEngine.SetQuit(true);
 
-            if(keyState[(int) Keyboard.Key.Space])
-                RunningEngine.CurrentRoom = "test";
+            /*if(keyState[(int) Keyboard.Key.Space])
+                RunningEngine.CurrentRoom = "test";*/
         }
         
         public ControlObject() {
@@ -79,7 +98,14 @@ namespace NewSuperChunks {
                 Text text = new Text("SUPER CHUNKS", RunningEngine.Fonts["Pixeled"], 36);
                 text.Position = new Vector2f(112, 720 - 64 * 5);
                 text.FillColor = Color.White;
-                
+
+                Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
+                if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
+                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128)
+                    target.Draw(PlayButtonOn);
+                else
+                    target.Draw(PlayButtonOff);
+
                 target.Draw(text);
             }
         }
