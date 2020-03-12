@@ -66,6 +66,108 @@ namespace NewSuperChunks {
         }
     }
 
+    public class GrassBlock : Solid {
+        public BlockType BlockPosition;
+
+        public GrassBlock(int x, int y, BlockType blockType) : base() {
+            X = x;
+            Y = y;
+
+            BlockPosition = blockType;
+        }
+
+        public override void Init(){
+            Tag = "GrassBlock";
+            Depth = 1;
+            
+            ImageSpeed = 0;
+            ImageIndex = 0;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 64;
+
+            switch(BlockPosition) {
+                case BlockType.Single:
+                case BlockType.TopLeft:
+                case BlockType.TopRight:
+                case BlockType.Top:
+                case BlockType.Right:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["grass_blocks"],
+                                    new IntRect[] { new IntRect(((int) BlockPosition) * 64, 0, 64, 64) });
+                    break;
+
+                case BlockType.Middle:
+                case BlockType.BottomLeft:
+                case BlockType.BottomRight:
+                case BlockType.Left:
+                case BlockType.Bottom:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["grass_blocks"],
+                                    new IntRect[] { new IntRect((((int) BlockPosition) - 5) * 64, 64, 64, 64) });
+                    break;
+
+                default:
+                    SpriteIndex = null;
+                    break;
+            }
+
+            if(SpriteIndex != null)
+                SpriteIndex.Smooth = false;
+        }
+    }
+
+    public class WaterBlock : Solid {
+        public BlockType BlockPosition;
+
+        public WaterBlock(int x, int y, BlockType blockType) : base() {
+            X = x;
+            Y = y;
+
+            BlockPosition = blockType;
+        }
+
+        public override void Init(){
+            Tag = "WaterBlock";
+            Depth = 1;
+            
+            ImageSpeed = 0;
+            ImageIndex = 0;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 64;
+
+            switch(BlockPosition) {
+                case BlockType.Single:
+                case BlockType.TopLeft:
+                case BlockType.TopRight:
+                case BlockType.Top:
+                case BlockType.Right:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["spr_ocean_blocks"],
+                                    new IntRect[] { new IntRect(((int) BlockPosition) * 64, 0, 64, 64) });
+                    break;
+
+                case BlockType.Middle:
+                case BlockType.BottomLeft:
+                case BlockType.BottomRight:
+                case BlockType.Left:
+                case BlockType.Bottom:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["spr_ocean_blocks"],
+                                    new IntRect[] { new IntRect((((int) BlockPosition) - 5) * 64, 64, 64, 64) });
+                    break;
+
+                default:
+                    SpriteIndex = null;
+                    break;
+            }
+
+            if(SpriteIndex != null)
+                SpriteIndex.Smooth = false;
+        }
+    }
+
     public class AirBlock : Solid {
         public BlockType BlockPosition;
 

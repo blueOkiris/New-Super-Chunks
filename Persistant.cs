@@ -44,7 +44,7 @@ namespace NewSuperChunks {
 
             switch(RunningEngine.CurrentRoom) {
                 case "title":
-                    RunningEngine.Background = Color.Blue;
+                    RunningEngine.Background = new Color(102, 161, 255);
                     break;
 
                 default:
