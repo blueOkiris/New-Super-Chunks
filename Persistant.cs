@@ -28,6 +28,7 @@ namespace NewSuperChunks {
         public override void Update(float deltaTime) {
             if(RunningEngine.CurrentRoom == "title" && RunningEngine.Audio["Chunks-Title"].Status != SoundStatus.Playing) {
                 RunningEngine.Audio["Chunks-Title"].Loop = true;
+                RunningEngine.Audio["Chunks-Title"].Volume = 50;
                 RunningEngine.Audio["Chunks-Title"].Play();
             } else if(RunningEngine.CurrentRoom != "title") {
                 RunningEngine.Audio["Chunks-Title"].Loop = false;
@@ -36,6 +37,7 @@ namespace NewSuperChunks {
             
             if(RunningEngine.CurrentRoom == "test" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
+                RunningEngine.Audio["Chunks-Intro-Level"].Volume = 50;
                 RunningEngine.Audio["Chunks-Intro-Level"].Play();
             } else if(RunningEngine.CurrentRoom != "test") {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = false;

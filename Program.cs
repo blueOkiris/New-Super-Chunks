@@ -31,7 +31,6 @@ namespace NewSuperChunks
                                 new List<Type>() {
                                     typeof(ControlObject),
                                     typeof(Player),
-                                    typeof(Rock),
                                     typeof(AirBlock),
                                     typeof(CloudThrough),
                                     typeof(BlockType)
