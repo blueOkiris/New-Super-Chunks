@@ -223,14 +223,14 @@ namespace NewSuperChunks {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
-            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(CloudThrough), 
+            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(JumpThrough), 
                     (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
             } else if(!RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(Solid), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)
-                    && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(CloudThrough), 
+                    && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(JumpThrough), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
                 IsGrounded = false;
             
@@ -285,7 +285,7 @@ namespace NewSuperChunks {
 
                     RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
             } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped) {
-                VSpeed = -JumpSpeed;
+                VSpeed = -JumpSpeed * 1.5f;
                 DoubleJumped = true;
                 RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
             }

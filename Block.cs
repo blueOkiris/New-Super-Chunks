@@ -219,27 +219,66 @@ namespace NewSuperChunks {
         }
     }
 
-    public class CloudThrough : GameObject {
+
+    public abstract class JumpThrough : GameObject {
         public override void EarlyUpdate(float deltaTime) {}
-        public override void Update(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[] keyState) {}
         public override void OnKeyDown(bool[] keyState) {}
         public override void OnKeyOff(bool[]  keyState) {}
         public override void OnKeyHeld(bool[] keyState) {}
         public override void OnTimer(int timerIndex) {}
-        
-        public override void OnCollision(GameObject other) {
-            //Console.WriteLine("Rock collision with: " + other.Tag);
+        public override void OnCollision(GameObject other) {}
+
+        public JumpThrough() {
+            Tag = "JumpThrough";
         }
 
-        public CloudThrough(int x, int y) {
+        public override void Draw(RenderTarget target, RenderStates states) {
+            if(SpriteIndex != null)
+                target.Draw(SpriteIndex);
+        }
+
+        public override void Update(float deltaTime) {
+            if(RunningEngine.CurrentRoom == "title") {
+                X -= 256 * deltaTime;
+
+                if(X + 32 <= 0)
+                    X = 1280 / 2;
+            }
+        }
+    }
+
+    public class GrassThrough : JumpThrough {
+        public GrassThrough(int x, int y) : base() {
             X = x;
             Y = y;
         }
         
         public override void Init() {
-            Tag = "JumpThrough";
+            Tag = "GrassThrough";
+            Depth = 1;
+
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["grass_jump"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex.Smooth = false;
+            ImageSpeed = 0;
+            ImageIndex = 0;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 9;
+        }
+    }
+
+    public class CloudThrough : JumpThrough {
+        public CloudThrough(int x, int y) : base() {
+            X = x;
+            Y = y;
+        }
+        
+        public override void Init() {
+            Tag = "CloudThrough";
             Depth = 1;
 
             SpriteIndex = new EksedraSprite(RunningEngine.Images["air_blocks"], new IntRect[] { new IntRect(0, 0, 64, 64) });
@@ -251,10 +290,6 @@ namespace NewSuperChunks {
             MaskY = -32;
             MaskWidth = 64;
             MaskHeight = 9;
-        }
-
-        public override void Draw(RenderTarget target, RenderStates states) {
-            target.Draw(SpriteIndex);
         }
     }
 }

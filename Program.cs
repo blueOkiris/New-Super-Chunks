@@ -35,6 +35,7 @@ namespace NewSuperChunks
                                     typeof(Player),
                                     typeof(AirBlock),
                                     typeof(CloudThrough),
+                                    typeof(GrassThrough),
                                     typeof(BlockType)
                                 }, "NewSuperChunks", loadSprite);
 
