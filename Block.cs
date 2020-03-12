@@ -43,29 +43,6 @@ namespace NewSuperChunks {
         }
     }
 
-    public class Rock : Solid {
-        public Rock(int x, int y) : base() {
-            X = x;
-            Y = y;
-        }
-
-        public override void Init() {
-            Tag = "Rock";
-            Depth = 1;
-            
-            ImageSpeed = 0;
-            ImageIndex = 0;
-
-            MaskX = -32;
-            MaskY = -32;
-            MaskWidth = 64;
-            MaskHeight = 64;
-
-            SpriteIndex = new EksedraSprite(RunningEngine.Images["spr_block_2"], new IntRect[] { new IntRect(0, 0, 64, 64) });
-            SpriteIndex.Smooth = false;
-        }
-    }
-
     public class GrassBlock : Solid {
         public BlockType BlockPosition;
 
