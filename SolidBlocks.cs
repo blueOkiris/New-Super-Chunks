@@ -45,7 +45,7 @@ namespace NewSuperChunks {
             }
         }
     }
-    
+
     public class GrassBlock : Solid {
         public GrassBlock(int x, int y, BlockType blockType) : base() {
             X = x;
@@ -211,6 +211,7 @@ namespace NewSuperChunks {
 
         public JumpThrough() {
             Tag = "JumpThrough";
+            Cull = false;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {

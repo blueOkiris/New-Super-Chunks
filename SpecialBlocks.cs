@@ -117,13 +117,13 @@ namespace NewSuperChunks {
 
         public override void Init() {
             Tag = "Ladder";
-            Depth = 2;
+            Depth = 1;
 
             SpriteIndex = new EksedraSprite(RunningEngine.Images["ladder"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;
 
             MaskX = -20;
-            MaskY = 0;
+            MaskY = -32;
             MaskWidth = 52;
             MaskHeight = 64;
         }
@@ -160,11 +160,6 @@ namespace NewSuperChunks {
 
             SpriteIndex = new EksedraSprite(RunningEngine.Images["water"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;
-
-            MaskX = -20;
-            MaskY = 0;
-            MaskWidth = 52;
-            MaskHeight = 64;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {

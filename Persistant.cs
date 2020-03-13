@@ -136,14 +136,14 @@ namespace NewSuperChunks {
         public bool Punched = false;                            // Public so it can break blocks
         private float PunchTime = 0.175f, PunchSpeed = 1800;
 
-        private bool IsClimbing = false;
+        private bool IsClimbing = false, IsSwimming = false;
 
         public override void EarlyUpdate(float deltaTime) {}
-        public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone, PlayerClimb;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone, PlayerClimb, PlayerSwim;
+        private EksedraSprite Splash;
 
         public Player(int x, int y) {
             X = x;
@@ -191,6 +191,32 @@ namespace NewSuperChunks {
                                                 new IntRect(724, 76, 64, 64),
                                             });
             PlayerClimb.Smooth = false;
+            PlayerSwim = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(4, 76, 64, 64),
+                                                new IntRect(76, 76, 64, 64),
+                                                new IntRect(148, 76, 64, 64),
+                                                new IntRect(220, 76, 64, 64),
+                                            });
+            PlayerSwim.Smooth = false;
+
+            Splash = new EksedraSprite(RunningEngine.Images["splash"], new IntRect[] {
+                                                new IntRect(0, 0, 64, 64),
+                                                new IntRect(64, 0, 64, 64),
+                                                new IntRect(2 * 64, 0, 64, 64),
+                                                new IntRect(3 * 64, 0, 64, 64),
+                                                new IntRect(4 * 64, 0, 64, 64),
+                                                new IntRect(5 * 64, 0, 64, 64),
+                                                new IntRect(6 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                                new IntRect(7 * 64, 0, 64, 64),
+                                            });
+            Splash.SetScale(2, 2);
+            Splash.ImageSpeed = 20;
+            Splash.Smooth = false;
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
@@ -221,80 +247,24 @@ namespace NewSuperChunks {
                 animeLines.Smooth = true;
                 target.Draw(animeLines);
             }
+
+            if(Timers[1] != -1) {
+                Splash.MoveTo(X, Y);
+                Splash.ImageIndex += (1.0f / 30.0f) * Splash.ImageSpeed;
+                target.Draw(Splash);
+            }
         }
 
         public override void Update(float deltaTime) {
-            GameObject other = null;
-
-            //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
-            if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
-                X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
-                HSpeed = 0;
-            } else if(X + MaskX < 0) {
-                X = -MaskX;
-                HSpeed = 0;
-            } else if(Y + MaskY + MaskHeight > RunningEngine.GetRoomSize().Y) {
-                Y = RunningEngine.GetRoomSize().Y - MaskY - MaskHeight;
-                VSpeed = 0;
-            } else if(Y + MaskY < 0) {
-                Y = -MaskY;
-                VSpeed = 0;
-            }
-
-            if(!RunningEngine.CheckCollision(X, Y, this, typeof(LadderBlock), (self, otra) => true, ref other))
-                IsClimbing = false;
-            
-            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing)
-                VSpeed += Gravity * deltaTime;
-
-            if(Punched)
-                HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
-            else if(!CanPunch)
-                HSpeed = Math.Sign(ImageScaleX) * MoveSpeed;
-
-            // Horizontal collision
-            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                X = other.X + other.MaskX - (MaskX + MaskWidth);
-                HSpeed = 0;
-            }
-            
-            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
-                X = other.X + other.MaskX + other.MaskWidth - MaskX;
-                HSpeed = 0;
-            }
-            
-            if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
-                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                Y = other.Y + other.MaskY - (MaskY + MaskHeight);
-                VSpeed = 0;
-                IsGrounded = true;
-            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(JumpThrough), 
-                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
-                Y = other.Y + other.MaskY - (MaskY + MaskHeight);
-                VSpeed = 0;
-                IsGrounded = true;
-            } else if(!RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(Solid), 
-                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)
-                    && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(JumpThrough), 
-                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
-                IsGrounded = false;
-            
-            if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
-                    (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
-                VSpeed = 0;
-            }
-
             // Animate
-            if(IsClimbing) {
+            if(IsSwimming) {
+                SpriteIndex = PlayerSwim;
+
+                if(Math.Abs(VSpeed) > 0 || Math.Abs(HSpeed) > 0)
+                    ImageSpeed = 10;
+                else
+                    ImageSpeed = 5;
+            } else if(IsClimbing) {
                 SpriteIndex = PlayerClimb;
 
                 if(Math.Abs(VSpeed) > 0)
@@ -364,6 +334,121 @@ namespace NewSuperChunks {
                     break;
             }
         }
+        
+        // Do collisions here to update right before speed affects movement
+        public override void LateUpdate(float deltaTime) {
+            GameObject other = null;
+
+            //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
+            if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
+                X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
+                HSpeed = 0;
+            } else if(X + MaskX < 0) {
+                X = -MaskX;
+                HSpeed = 0;
+            } else if(Y + MaskY + MaskHeight > RunningEngine.GetRoomSize().Y) {
+                Y = RunningEngine.GetRoomSize().Y - MaskY - MaskHeight;
+                VSpeed = 0;
+            } else if(Y + MaskY < 0) {
+                Y = -MaskY;
+                VSpeed = 0;
+            }
+
+            if(!RunningEngine.CheckCollision(X, Y, this, typeof(LadderBlock), (self, otra) => true, ref other)) {
+                if(IsClimbing)
+                    VSpeed -= JumpSpeed / 2;
+
+                IsClimbing = false;
+            }
+            
+            if(RunningEngine.CheckCollision(X, Y, this, typeof(Water), (self, otra) => true, ref other)) {
+                if(!IsSwimming) {
+                    Y += 64;
+                    Splash.ImageIndex = 0;
+                    Timers[1] = 0.25f;
+                }
+
+                IsSwimming = true;
+            } else if(IsSwimming && !IsClimbing) {
+                VSpeed -= JumpSpeed / 2;
+                IsSwimming = false;
+                Splash.ImageIndex = 0;
+                Timers[1] = 0.25f;
+            }
+
+            if(IsSwimming)
+                CanPunch = true;
+
+            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing && !IsSwimming)
+                VSpeed += Gravity * deltaTime;
+
+            if(Punched)
+                HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
+            else if(!CanPunch)
+                HSpeed = Math.Sign(ImageScaleX) * MoveSpeed;
+
+            // Horizontal collision
+            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                X = other.X + other.MaskX - (MaskX + MaskWidth);
+                HSpeed = 0;
+            }
+            
+            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
+                X = other.X + other.MaskX + other.MaskWidth - MaskX;
+                HSpeed = 0;
+            }
+            
+            if(IsClimbing || IsSwimming) {
+                if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                    VSpeed = 0;
+                } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(JumpThrough),
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
+                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                    VSpeed = 0;
+                }
+                
+                if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
+                        (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
+                    VSpeed = 0;
+                }
+            } else {
+                // Work differently for proper landing
+                if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                    VSpeed = 0;
+                    IsGrounded = true;
+                } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(JumpThrough), 
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
+                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                    VSpeed = 0;
+                    IsGrounded = true;
+                } else if(!RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(Solid), 
+                            (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)
+                        && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(JumpThrough), 
+                            (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
+                    IsGrounded = false;
+                
+                if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
+                        (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
+                    VSpeed = 0;
+                }
+            }
+        }
 
         public override void OnKeyDown(bool[] keyState) {
             if(RunningEngine.CurrentRoom == "title") {
@@ -371,7 +456,7 @@ namespace NewSuperChunks {
                 return;
             }
 
-            if(!IsClimbing) {
+            if(!IsClimbing && !IsSwimming) {
                 if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch) {
                         VSpeed = -JumpSpeed;
                         IsGrounded = false;
@@ -384,7 +469,7 @@ namespace NewSuperChunks {
                 }
             }
 
-            if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch) {
+            if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch && !IsSwimming) {
                 Timers[0] = PunchTime;
                 Punched = true;
                 CanPunch = false;
@@ -406,7 +491,7 @@ namespace NewSuperChunks {
 
             GameObject other = null;
             if(RunningEngine.CheckCollision(X, Y, this, typeof(LadderBlock), (self, otra) => true, ref other)) {
-                if(!IsClimbing && (keyState[(int) Keyboard.Key.Up] || keyState[(int) Keyboard.Key.Down]))
+                if(!IsSwimming && !IsClimbing && (keyState[(int) Keyboard.Key.Up] || keyState[(int) Keyboard.Key.Down]))
                     IsClimbing = true;
             } 
 
@@ -415,9 +500,9 @@ namespace NewSuperChunks {
             else if(keyState[(int) Keyboard.Key.Right] && CanPunch)
                 HSpeed = MoveSpeed;
 
-            if(IsClimbing && keyState[(int) Keyboard.Key.Up])
+            if((IsClimbing || IsSwimming) && keyState[(int) Keyboard.Key.Up])
                 VSpeed = -MoveSpeed;
-            else if(IsClimbing && keyState[(int) Keyboard.Key.Down])
+            else if((IsClimbing || IsSwimming) && keyState[(int) Keyboard.Key.Down])
                 VSpeed = MoveSpeed;
         }
         
@@ -427,9 +512,9 @@ namespace NewSuperChunks {
             else if(keyState[(int) Keyboard.Key.Right] && HSpeed > 0)
                 HSpeed = 0;
 
-            if(IsClimbing && keyState[(int) Keyboard.Key.Up] && VSpeed < 0)
+            if((IsClimbing || IsSwimming) && keyState[(int) Keyboard.Key.Up] && VSpeed < 0)
                 VSpeed = 0;
-            else if(IsClimbing && keyState[(int) Keyboard.Key.Down] && VSpeed > 0)
+            else if((IsClimbing || IsSwimming) && keyState[(int) Keyboard.Key.Down] && VSpeed > 0)
                 VSpeed = 0;
         }
     }
