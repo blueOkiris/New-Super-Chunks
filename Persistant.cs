@@ -204,7 +204,9 @@ namespace NewSuperChunks {
 
             if(Punched) {
                 EksedraSprite animeLines = new EksedraSprite(RunningEngine.Images["anime-lines"], new IntRect[] { new IntRect(0, 0, 1280 * 3/4, 720 * 3/4) });
-                animeLines.MoveTo(RunningEngine.ViewPort.Left + 320, RunningEngine.ViewPort.Top + 180);
+                animeLines.MoveTo(
+                            RunningEngine.ViewPort.Left + RunningEngine.ViewPort.Width / 2, 
+                            RunningEngine.ViewPort.Top + RunningEngine.ViewPort.Height / 2);
                 animeLines.Smooth = true;
                 target.Draw(animeLines);
             }
