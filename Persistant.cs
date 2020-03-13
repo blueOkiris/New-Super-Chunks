@@ -106,8 +106,8 @@ namespace NewSuperChunks {
             target.Draw(text);*/
 
             if(RunningEngine.CurrentRoom == "title") {
-                Text text = new Text("SUPER CHUNKS", RunningEngine.Fonts["Pixeled"], 36);
-                text.Position = new Vector2f(112 + 1280 / 4, 720 - 64 * 7);
+                Text text = new Text("NEW SUPER CHUNKS", RunningEngine.Fonts["Pixeled"], 36);
+                text.Position = new Vector2f(64 + 1280 / 4, 720 - 64 * 7);
                 text.FillColor = Color.White;
 
                 Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
