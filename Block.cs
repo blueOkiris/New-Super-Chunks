@@ -70,10 +70,13 @@ namespace NewSuperChunks {
         }
 
         public override void OnCollision(GameObject other) {
-            if(other.Tag == "Player" && (other as Player).Punched) {
+            if(other.Tag == "Player" && (other as Player).Punched && BlockPosition != BlockType.PassThrough) {
                 BlockPosition = BlockType.PassThrough;
                 SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(64, 0, 64, 64) });
                 SpriteIndex.Smooth = false;
+
+                (other as Player).Punched = false;
+                other.HSpeed = 0;
             }
         }
     }
