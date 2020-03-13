@@ -5,6 +5,7 @@
 
 using SFML.Graphics;
 using EksedraEngine;
+using System;
 
 namespace NewSuperChunks {
     public enum BlockType {
@@ -76,7 +77,8 @@ namespace NewSuperChunks {
                 SpriteIndex.Smooth = false;
 
                 (other as Player).Punched = false;
-                other.HSpeed = 0;
+                other.HSpeed = Math.Sign(other.ImageScaleX) * Math.Abs(other.HSpeed);
+                other.VSpeed = -600;
             }
         }
     }

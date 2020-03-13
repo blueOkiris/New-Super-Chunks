@@ -123,7 +123,7 @@ namespace NewSuperChunks {
         private bool IsGrounded = false;
 
         private bool DoubleJumpUnlocked, PunchUnlocked;
-        private bool DoubleJumped = false, CanPunch = false;
+        private bool DoubleJumped = false, CanPunch = true;
         public bool Punched = false;                            // Public so it can break blocks
         private float PunchTime = 0.175f, PunchSpeed = 1800;
 
@@ -132,7 +132,7 @@ namespace NewSuperChunks {
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone;
 
         public Player(int x, int y) {
             X = x;
@@ -145,22 +145,22 @@ namespace NewSuperChunks {
             Depth = 0;
 
             PlayerStand = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(0, 4, 64, 64)
+                                                new IntRect(4, 4, 64, 64)
                                             });
             PlayerStand.Smooth = false;
             PlayerJump = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(72, 4, 64, 64)
+                                                new IntRect(76, 4, 64, 64)
                                             });
             PlayerJump.Smooth = false;
             PlayerFall = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(144, 4, 64, 64)
+                                                new IntRect(148, 4, 64, 64)
                                             });
             PlayerFall.Smooth = false;
             PlayerRun = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
-                                                new IntRect(216, 4, 64, 64),
-                                                new IntRect(288, 4, 64, 64),
+                                                new IntRect(220, 4, 64, 64),
+                                                new IntRect(292, 4, 64, 64),
                                                 new IntRect(364, 4, 64, 64),
-                                                new IntRect(432, 4, 64, 64),
+                                                new IntRect(436, 4, 64, 64),
                                             });
             PlayerRun.Smooth = false;
             PlayerSuperJump = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
@@ -171,6 +171,10 @@ namespace NewSuperChunks {
                                                 new IntRect(508, 4, 64, 64)
                                             });
             PlayerPunch.Smooth = false;
+            PlayerPunchDone = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(508, 76, 64, 64)
+                                            });
+            PlayerPunchDone.Smooth = false;
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
@@ -195,7 +199,7 @@ namespace NewSuperChunks {
 
             if(Punched) {
                 EksedraSprite animeLines = new EksedraSprite(RunningEngine.Images["anime-lines"], new IntRect[] { new IntRect(0, 0, 640, 360) });
-                animeLines.MoveTo(X, Y);
+                animeLines.MoveTo(RunningEngine.ViewPort.Left + 320, RunningEngine.ViewPort.Top + 180);
                 animeLines.Smooth = true;
                 target.Draw(animeLines);
             }
@@ -222,6 +226,8 @@ namespace NewSuperChunks {
 
             if(Punched)
                 HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
+            else if(!CanPunch)
+                HSpeed = Math.Sign(ImageScaleX) * MoveSpeed;
 
             // Horizontal collision
             GameObject other = null;
@@ -275,11 +281,11 @@ namespace NewSuperChunks {
                 if(!Punched)
                     CanPunch = true;
             } else
-                SpriteIndex = VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump);
+                SpriteIndex = !CanPunch ? (!Punched ? PlayerPunchDone : PlayerPunch) : (VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump));
             
-            if(HSpeed > 0)
+            if(HSpeed > 0 && CanPunch)
                 ImageScaleX = Math.Abs(ImageScaleX);
-            else if(HSpeed < 0)
+            else if(HSpeed < 0 && CanPunch)
                 ImageScaleX = -Math.Abs(ImageScaleX);
             
             
@@ -308,12 +314,12 @@ namespace NewSuperChunks {
                 return;
             }
 
-            if(keyState[(int) Keyboard.Key.Up] && IsGrounded) {
+            if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch) {
                     VSpeed = -JumpSpeed;
                     IsGrounded = false;
 
                     RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
-            } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped) {
+            } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped && CanPunch) {
                 VSpeed = -JumpSpeed * 1.5f;
                 DoubleJumped = true;
                 RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
@@ -338,9 +344,9 @@ namespace NewSuperChunks {
                 return;
             }
 
-            if(keyState[(int) Keyboard.Key.Left])
+            if(keyState[(int) Keyboard.Key.Left] && CanPunch)
                 HSpeed = -MoveSpeed;
-            else if(keyState[(int) Keyboard.Key.Right])
+            else if(keyState[(int) Keyboard.Key.Right] && CanPunch)
                 HSpeed = MoveSpeed;
         }
         

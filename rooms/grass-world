@@ -88,8 +88,8 @@ new GameRoom (
         new GrassBlock(32 + 3 * 64, 26 * 64, BlockType.Top),
         new GrassBlock(32 + 4 * 64, 26 * 64, BlockType.TopRight),
 
-        new Box(32 + 4 * 64, 25 * 64),
-        new Box(32 + 4 * 64, 24 * 64),
+        new Box(32 + 3 * 64, 25 * 64),
+        new Box(32 + 3 * 64, 24 * 64),
 
         // Left side wall
         new GrassBlock(32, 23 * 64, BlockType.Bottom),
