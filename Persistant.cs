@@ -136,12 +136,14 @@ namespace NewSuperChunks {
         public bool Punched = false;                            // Public so it can break blocks
         private float PunchTime = 0.175f, PunchSpeed = 1800;
 
+        private bool IsClimbing = false;
+
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone, PlayerClimb;
 
         public Player(int x, int y) {
             X = x;
@@ -184,6 +186,11 @@ namespace NewSuperChunks {
                                                 new IntRect(508, 76, 64, 64)
                                             });
             PlayerPunchDone.Smooth = false;
+            PlayerClimb = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(724, 4, 64, 64),
+                                                new IntRect(724, 76, 64, 64),
+                                            });
+            PlayerClimb.Smooth = false;
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
@@ -217,6 +224,8 @@ namespace NewSuperChunks {
         }
 
         public override void Update(float deltaTime) {
+            GameObject other = null;
+
             //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
             if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
                 X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
@@ -231,8 +240,11 @@ namespace NewSuperChunks {
                 Y = -MaskY;
                 VSpeed = 0;
             }
+
+            if(!RunningEngine.CheckCollision(X, Y, this, typeof(LadderBlock), (self, otra) => true, ref other))
+                IsClimbing = false;
             
-            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched)
+            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing)
                 VSpeed += Gravity * deltaTime;
 
             if(Punched)
@@ -241,7 +253,6 @@ namespace NewSuperChunks {
                 HSpeed = Math.Sign(ImageScaleX) * MoveSpeed;
 
             // Horizontal collision
-            GameObject other = null;
             if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
                     (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
                                     && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
@@ -283,17 +294,28 @@ namespace NewSuperChunks {
             }
 
             // Animate
-            if(Punched)
-                SpriteIndex = PlayerPunch;
-            else if(IsGrounded) {
-                SpriteIndex = Math.Abs(HSpeed) > 0 ? PlayerRun : PlayerStand;
+            if(IsClimbing) {
+                SpriteIndex = PlayerClimb;
 
-                DoubleJumped = false;
-                if(!Punched)
-                    CanPunch = true;
-            } else
-                SpriteIndex = !CanPunch ? (!Punched ? PlayerPunchDone : PlayerPunch) : (VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump));
-            
+                if(Math.Abs(VSpeed) > 0)
+                    ImageSpeed = 10;
+                else
+                    ImageSpeed = 0;
+            } else {
+                ImageSpeed = 10;
+
+                if(Punched)
+                    SpriteIndex = PlayerPunch;
+                else if(IsGrounded) {
+                    SpriteIndex = Math.Abs(HSpeed) > 0 ? PlayerRun : PlayerStand;
+
+                    DoubleJumped = false;
+                    if(!Punched)
+                        CanPunch = true;
+                } else
+                    SpriteIndex = !CanPunch ? (!Punched ? PlayerPunchDone : PlayerPunch) : (VSpeed > 0 ? PlayerFall : (DoubleJumped ? PlayerSuperJump : PlayerJump));
+            }
+
             if(HSpeed > 0 && CanPunch)
                 ImageScaleX = Math.Abs(ImageScaleX);
             else if(HSpeed < 0 && CanPunch)
@@ -349,21 +371,24 @@ namespace NewSuperChunks {
                 return;
             }
 
-            if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch) {
-                    VSpeed = -JumpSpeed;
-                    IsGrounded = false;
+            if(!IsClimbing) {
+                if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch) {
+                        VSpeed = -JumpSpeed;
+                        IsGrounded = false;
 
+                        RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
+                } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped && CanPunch) {
+                    VSpeed = -JumpSpeed * 1.5f;
+                    DoubleJumped = true;
                     RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
-            } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped && CanPunch) {
-                VSpeed = -JumpSpeed * 1.5f;
-                DoubleJumped = true;
-                RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
+                }
             }
 
             if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch) {
                 Timers[0] = PunchTime;
                 Punched = true;
                 CanPunch = false;
+                IsClimbing = false;
                 RunningEngine.Audio["270310__littlerobotsoundfactory__explosion-04"].Play();
             }
         }
@@ -379,10 +404,21 @@ namespace NewSuperChunks {
                 return;
             }
 
+            GameObject other = null;
+            if(RunningEngine.CheckCollision(X, Y, this, typeof(LadderBlock), (self, otra) => true, ref other)) {
+                if(!IsClimbing && (keyState[(int) Keyboard.Key.Up] || keyState[(int) Keyboard.Key.Down]))
+                    IsClimbing = true;
+            } 
+
             if(keyState[(int) Keyboard.Key.Left] && CanPunch)
                 HSpeed = -MoveSpeed;
             else if(keyState[(int) Keyboard.Key.Right] && CanPunch)
                 HSpeed = MoveSpeed;
+
+            if(IsClimbing && keyState[(int) Keyboard.Key.Up])
+                VSpeed = -MoveSpeed;
+            else if(IsClimbing && keyState[(int) Keyboard.Key.Down])
+                VSpeed = MoveSpeed;
         }
         
         public override void OnKeyOff(bool[] keyState) {
@@ -390,6 +426,11 @@ namespace NewSuperChunks {
                 HSpeed = 0;
             else if(keyState[(int) Keyboard.Key.Right] && HSpeed > 0)
                 HSpeed = 0;
+
+            if(IsClimbing && keyState[(int) Keyboard.Key.Up] && VSpeed < 0)
+                VSpeed = 0;
+            else if(IsClimbing && keyState[(int) Keyboard.Key.Down] && VSpeed > 0)
+                VSpeed = 0;
         }
     }
 }
