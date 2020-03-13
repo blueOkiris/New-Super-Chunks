@@ -32,7 +32,7 @@ Then there will be an executable 'New Super Chunks.exe'
 
 ### Linux (x64)
 
-In a terminal run `export PublishSingleFile=true && dotnet publish -c Release -r linux-x64 && mv ./bin/Release/netcoreapp3.1/linux-x64/publish/New\ Super\ Chunks ./`
+In a terminal run `export PublishSingleFile=true && dotnet publish -c Release -r linux-x64 && mv ./bin/Release/netcoreapp3.1/linux-x64/publish/New\ Super\ Chunks ./ && sudo rm -rf /var/tmp/.net`
 
 Then there will be a binary called 'New Super Chunks'
 
