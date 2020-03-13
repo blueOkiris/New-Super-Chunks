@@ -41,7 +41,7 @@ namespace NewSuperChunks {
                 X -= 256 * deltaTime;
 
                 if(X + 32 <= 0)
-                    X = 1280 / 2;
+                    X = 1280;
             }
         }
     }
@@ -297,7 +297,7 @@ namespace NewSuperChunks {
             Tag = "CloudThrough";
             Depth = 1;
 
-            SpriteIndex = new EksedraSprite(RunningEngine.Images["air_blocks"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["cloud_jumpthrough"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;
             ImageSpeed = 0;
             ImageIndex = 0;

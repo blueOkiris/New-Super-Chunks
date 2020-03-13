@@ -1,7 +1,7 @@
 new GameRoom(
     new List<GameObject>() {
         new ControlObject(),
-        new Player(1280 / 4, 720 / 4),
+        new Player(1280 / 2, 720 / 2),
         new GrassBlock(32, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 64, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 2 * 64, 720 - 32, BlockType.Top),
@@ -25,6 +25,24 @@ new GameRoom(
         new GrassBlock(32 + 20 * 64, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 21 * 64, 720 - 32, BlockType.Top),
         new GrassBlock(32 + 22 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 23 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 24 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 25 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 26 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 27 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 28 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 29 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 30 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 31 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 32 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 33 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 34 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 35 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 36 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 37 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 38 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 39 * 64, 720 - 32, BlockType.Top),
+        new GrassBlock(32 + 40 * 64, 720 - 32, BlockType.Top),
     },
     new Vector2f(1280, 720)
 )

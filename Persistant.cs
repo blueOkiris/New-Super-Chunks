@@ -26,12 +26,15 @@ namespace NewSuperChunks {
         public override void Init() {
             Tag = "Control";
 
+            RunningEngine.ViewPort.Width = 3 * 1280 / 4;
+            RunningEngine.ViewPort.Height = 3 * 720 / 4;
+
             PlayButtonOff = new EksedraSprite(RunningEngine.Images["play_button"], new IntRect[] { new IntRect(0, 0, 512, 128) });
             PlayButtonOn = new EksedraSprite(RunningEngine.Images["play_button"], new IntRect[] { new IntRect(0, 128, 512, 128) });
-            PlayButtonOff.MoveTo(1280 / 4, 3 * 720 / 4);
+            PlayButtonOff.MoveTo(1280 / 2, 720 / 2 + 64);
             PlayButtonOff.Smooth = true;
             PlayButtonOff.SetScale(0.5f, 0.5f);
-            PlayButtonOn.MoveTo(1280 / 4, 3 * 720 / 4);
+            PlayButtonOn.MoveTo(1280 / 2, 720 / 2 + 64);
             PlayButtonOn.Smooth = true;
             PlayButtonOn.SetScale(0.5f, 0.5f);
         }
@@ -100,12 +103,14 @@ namespace NewSuperChunks {
 
             if(RunningEngine.CurrentRoom == "title") {
                 Text text = new Text("SUPER CHUNKS", RunningEngine.Fonts["Pixeled"], 36);
-                text.Position = new Vector2f(112, 720 - 64 * 5);
+                text.Position = new Vector2f(112 + 1280 / 4, 720 - 64 * 7);
                 text.FillColor = Color.White;
 
                 Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
-                if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
-                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128)
+                float centerX = RunningEngine.ViewPort.Left + RunningEngine.ViewPort.Width / 2;
+                float centerY = RunningEngine.ViewPort.Top + RunningEngine.ViewPort.Height / 2;
+                if(mousePos.X > centerX - 172 && mousePos.X < centerX + 172
+                        && mousePos.Y > centerY - 160 && mousePos.Y < centerY - 80)
                     target.Draw(PlayButtonOn);
                 else
                     target.Draw(PlayButtonOff);
@@ -198,7 +203,7 @@ namespace NewSuperChunks {
             target.Draw(mask);*/
 
             if(Punched) {
-                EksedraSprite animeLines = new EksedraSprite(RunningEngine.Images["anime-lines"], new IntRect[] { new IntRect(0, 0, 640, 360) });
+                EksedraSprite animeLines = new EksedraSprite(RunningEngine.Images["anime-lines"], new IntRect[] { new IntRect(0, 0, 1280 * 3/4, 720 * 3/4) });
                 animeLines.MoveTo(RunningEngine.ViewPort.Left + 320, RunningEngine.ViewPort.Top + 180);
                 animeLines.Smooth = true;
                 target.Draw(animeLines);
@@ -306,6 +311,14 @@ namespace NewSuperChunks {
                 RunningEngine.ViewPort.Top = RunningEngine.GetRoomSize().Y - RunningEngine.ViewPort.Height;
             else
                 RunningEngine.ViewPort.Top = Y - RunningEngine.ViewPort.Height / 2;
+
+            // Room transitions
+            if(RunningEngine.CurrentRoom == "grass-world" && X >= 32 + 29 * 64 && Y > 25 * 64) {
+                RunningEngine.CurrentRoom = "air-world";
+                VSpeed = 0;
+                X = 32 + 3.5f * 64;
+                Y = 64;
+            }
         }
 
         public override void OnKeyDown(bool[] keyState) {
