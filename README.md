@@ -14,14 +14,14 @@ The original [Chunks](https://chunksgame.webs.com/)
 ## Screen Shots
 
 <!-- <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image.png" width="640" /> -->
-<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-top.png" />
+<img style="center" src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-top.png" />
 
-<div style="center">
-    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="450" />
-    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="450" />
+<div>
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="440" />
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="440" />
 </div>
 
-<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-bottom.png" />
+<img style="center" src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-bottom.png" />
 
 ## Build and Run
 
