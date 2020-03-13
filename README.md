@@ -13,7 +13,8 @@ The original [Chunks](https://chunksgame.webs.com/)
 
 ## Screen Shots
 
-<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image.png" width="640" />
+<!-- <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image.png" width="640" /> -->
+<div style="background-image:url('https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image.png'); width:640px; height:512px; background-position:center;"> &nbsp; </div>
 
 <div>
     <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="320" />
