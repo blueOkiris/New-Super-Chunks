@@ -15,9 +15,10 @@ The original [Chunks](https://chunksgame.webs.com/)
 
 <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image.png" width="640" />
 
-<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="320" />
-
-<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="320" />
+<div>
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="320" />
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="320" />
+</div>
 
 ## Build and Run
 
