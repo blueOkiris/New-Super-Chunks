@@ -11,10 +11,13 @@ namespace NewSuperChunks {
         Single = 0,
         Middle = 5,
         TopLeft = 1, TopRight = 2, BottomLeft = 6, BottomRight = 7,
-        Top = 3, Right = 4, Bottom = 9, Left = 8
+        Top = 3, Right = 4, Bottom = 9, Left = 8,
+        PassThrough = 10
     }
 
     public abstract class Solid : GameObject {
+        public BlockType BlockPosition;
+
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[] keyState) {}
@@ -22,7 +25,6 @@ namespace NewSuperChunks {
         public override void OnKeyOff(bool[]  keyState) {}
         public override void OnKeyHeld(bool[] keyState) {}
         public override void OnTimer(int timerIndex) {}
-        public override void OnCollision(GameObject other) {}
 
         public Solid() {
             Tag = "Solid";
@@ -47,6 +49,8 @@ namespace NewSuperChunks {
         public Box(int x, int y) : base() {
             X = x;
             Y = y;
+
+            BlockPosition = BlockType.Single;
         }
 
         public override void Init() {
@@ -64,17 +68,25 @@ namespace NewSuperChunks {
             SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;
         }
+
+        public override void OnCollision(GameObject other) {
+            if(other.Tag == "Player" && (other as Player).Punched) {
+                BlockPosition = BlockType.PassThrough;
+                SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(64, 0, 64, 64) });
+                SpriteIndex.Smooth = false;
+            }
+        }
     }
 
     public class GrassBlock : Solid {
-        public BlockType BlockPosition;
-
         public GrassBlock(int x, int y, BlockType blockType) : base() {
             X = x;
             Y = y;
 
             BlockPosition = blockType;
         }
+
+        public override void OnCollision(GameObject other) {}
 
         public override void Init() {
             Tag = "GrassBlock";
@@ -118,14 +130,14 @@ namespace NewSuperChunks {
     }
 
     public class WaterBlock : Solid {
-        public BlockType BlockPosition;
-
         public WaterBlock(int x, int y, BlockType blockType) : base() {
             X = x;
             Y = y;
 
             BlockPosition = blockType;
         }
+
+        public override void OnCollision(GameObject other) {}
 
         public override void Init() {
             Tag = "WaterBlock";
@@ -169,14 +181,14 @@ namespace NewSuperChunks {
     }
 
     public class AirBlock : Solid {
-        public BlockType BlockPosition;
-
         public AirBlock(int x, int y, BlockType blockType) : base() {
             X = x;
             Y = y;
 
             BlockPosition = blockType;
         }
+
+        public override void OnCollision(GameObject other) {}
 
         public override void Init() {
             Tag = "AirBlock";
@@ -218,7 +230,6 @@ namespace NewSuperChunks {
                 SpriteIndex.Smooth = false;
         }
     }
-
 
     public abstract class JumpThrough : GameObject {
         public override void EarlyUpdate(float deltaTime) {}

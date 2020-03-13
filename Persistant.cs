@@ -123,8 +123,8 @@ namespace NewSuperChunks {
         private bool IsGrounded = false;
 
         private bool DoubleJumpUnlocked, PunchUnlocked;
-        private bool DoubleJumped = false;
-        public bool CanPunch = false, Punched = false;
+        private bool DoubleJumped = false, CanPunch = false;
+        public bool Punched = false;                            // Public so it can break blocks
         private float PunchTime = 0.175f, PunchSpeed = 1800;
 
         public override void EarlyUpdate(float deltaTime) {}
@@ -219,20 +219,23 @@ namespace NewSuperChunks {
             // Horizontal collision
             GameObject other = null;
             if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                 X = other.X + other.MaskX - (MaskX + MaskWidth);
                 HSpeed = 0;
             }
             
             if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
+                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                 //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
                 X = other.X + other.MaskX + other.MaskWidth - MaskX;
                 HSpeed = 0;
             }
             
             if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
-                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
+                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                 Y = other.Y + other.MaskY - (MaskY + MaskHeight);
                 VSpeed = 0;
                 IsGrounded = true;
@@ -242,13 +245,15 @@ namespace NewSuperChunks {
                 VSpeed = 0;
                 IsGrounded = true;
             } else if(!RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(Solid), 
-                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)
                     && !RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + 1, this, typeof(JumpThrough), 
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
                 IsGrounded = false;
             
             if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
-                    (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
+                    (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight 
+                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                 Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
                 VSpeed = 0;
             }
@@ -311,6 +316,7 @@ namespace NewSuperChunks {
                 Timers[0] = PunchTime;
                 Punched = true;
                 CanPunch = false;
+                RunningEngine.Audio["270310__littlerobotsoundfactory__explosion-04"].Play();
             }
         }
 
