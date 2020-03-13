@@ -192,6 +192,13 @@ namespace NewSuperChunks {
             mask.Position = new Vector2f(X + MaskX, Y + MaskY);
             mask.Size = new Vector2f(MaskWidth, MaskHeight);
             target.Draw(mask);*/
+
+            if(Punched) {
+                EksedraSprite animeLines = new EksedraSprite(RunningEngine.Images["anime-lines"], new IntRect[] { new IntRect(0, 0, 640, 360) });
+                animeLines.MoveTo(X, Y);
+                animeLines.Smooth = true;
+                target.Draw(animeLines);
+            }
         }
 
         public override void Update(float deltaTime) {
