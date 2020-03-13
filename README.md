@@ -17,6 +17,8 @@ The original [Chunks](https://chunksgame.webs.com/)
 
 <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="640" />
 
+<img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="640" />
+
 ## Build and Run
 
 ### Windows
