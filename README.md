@@ -17,8 +17,8 @@ The original [Chunks](https://chunksgame.webs.com/)
 <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-top.png" />
 
 <div>
-    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="512" />
-    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="512" />
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/example-image.png" width="320" />
+    <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/water-image.png" width="320" />
 </div>
 
 <img src="https://github.com/blueOkiris/New-Super-Chunks/blob/master/images/title-image-bottom.png" />
