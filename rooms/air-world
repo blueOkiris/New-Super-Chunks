@@ -302,6 +302,17 @@ new GameRoom(
         new AirBlock(32 + 32 * 64,    32 + 19 * 64, BlockType.Middle),
         new AirBlock(32 + 33 * 64,    32 + 19 * 64, BlockType.Middle),
         new AirBlock(32 + 34 * 64,    32 + 19 * 64, BlockType.Middle),
+
+        new Box(32 + 23 * 65, 32 + 12 * 64),
+        new Box(32 + 23 * 65, 32 + 11 * 64),
+        new Box(32 + 23 * 65, 32 + 10 * 64),
+
+        // Add room transition indicators
+        new BoundaryBlock(64, 32 + 11 * 64, BlockType.Left),
+        new BoundaryBlock(64, 32 + 12 * 64, BlockType.Left),
+
+        new BoundaryBlock(32 + 16 * 64, 19 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 17 * 64, 19 * 64, BlockType.Bottom),
     },
     new Vector2f(35 * 64, 20 * 64)
 )

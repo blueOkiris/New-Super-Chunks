@@ -36,7 +36,8 @@ namespace NewSuperChunks
                                     typeof(AirBlock),
                                     typeof(CloudThrough),
                                     typeof(GrassThrough),
-                                    typeof(BlockType)
+                                    typeof(BlockType),
+                                    typeof(BoundaryBlock)
                                 }, "NewSuperChunks", loadSprite);
 
             Console.WriteLine("Running engine!");

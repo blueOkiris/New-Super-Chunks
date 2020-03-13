@@ -16,6 +16,59 @@ namespace NewSuperChunks {
         PassThrough = 10
     }
 
+    public class BoundaryBlock : GameObject {
+        public BlockType BlockRotation;
+
+        public BoundaryBlock(float x, float y, BlockType blockType) {
+            X = x;
+            Y = y;
+            BlockRotation = blockType;
+        }
+
+        public override void Init() {
+            switch(BlockRotation) {
+                case BlockType.Left:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["boundary-block"], new IntRect[] { new IntRect(128, 0, 128, 64) });
+                    break;
+
+                case BlockType.Right:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["boundary-block"], new IntRect[] { new IntRect(128, 64, 128, 64) });
+                    break;
+
+                case BlockType.Top:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["boundary-block"], new IntRect[] { new IntRect(0, 0, 64, 128) });
+                    break;
+
+                case BlockType.Bottom:
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["boundary-block"], new IntRect[] { new IntRect(64, 0, 64, 128) });
+                    break;
+
+                default:
+                    SpriteIndex = null;
+                    break;
+            }
+
+            Cull = false;
+            if(SpriteIndex != null)
+                SpriteIndex.Smooth = false;
+        }
+
+        public override void Draw(RenderTarget target, RenderStates states){
+            if(SpriteIndex != null)
+                target.Draw(SpriteIndex);
+        }
+
+        public override void EarlyUpdate(float deltaTime) {}
+        public override void LateUpdate(float deltaTime) {}
+        public override void OnCollision(GameObject other) {}
+        public override void OnKeyDown(bool[] keyState) {}
+        public override void OnKeyHeld(bool[] keyState) {}
+        public override void OnKeyOff(bool[] keyState) {}
+        public override void OnKeyUp(bool[] keyState) {}
+        public override void OnTimer(int timerIndex) {}
+        public override void Update(float deltaTime) {}
+    }
+
     public abstract class Solid : GameObject {
         public BlockType BlockPosition;
 

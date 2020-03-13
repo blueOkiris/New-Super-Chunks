@@ -551,6 +551,15 @@ new GameRoom(
         new GrassBlock(32 + 32 * 64, 0 * 64 + 32, BlockType.Middle),
         new GrassBlock(32 + 33 * 64, 0 * 64 + 32, BlockType.Middle),
         new GrassBlock(32 + 34 * 64, 0 * 64 + 32, BlockType.Middle),
+
+        // Draw gradient where world transition is
+        new BoundaryBlock(32 + 30 * 64, 30 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 31 * 64, 30 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 32 * 64, 30 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 33 * 64, 30 * 64, BlockType.Bottom),
+
+        new BoundaryBlock(64, 32 + 24 * 64, BlockType.Left),
+        new BoundaryBlock(64, 32 + 25 * 64, BlockType.Left),
     },
     new Vector2f(35 * 64, 31 * 64)
 )

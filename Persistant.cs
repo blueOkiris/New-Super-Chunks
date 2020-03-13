@@ -64,6 +64,10 @@ namespace NewSuperChunks {
                     RunningEngine.Background = new Color(102, 161, 255);
                     break;
 
+                case "air-world":
+                    RunningEngine.Background = new Color(235, 226, 143);
+                    break;
+
                 default:
                     RunningEngine.Background = Color.Yellow;
                     break;
@@ -315,11 +319,27 @@ namespace NewSuperChunks {
                 RunningEngine.ViewPort.Top = Y - RunningEngine.ViewPort.Height / 2;
 
             // Room transitions
-            if(RunningEngine.CurrentRoom == "grass-world" && X >= 32 + 29 * 64 && Y > 25 * 64) {
-                RunningEngine.CurrentRoom = "air-world";
-                VSpeed = 0;
-                X = 32 + 3.5f * 64;
-                Y = 64;
+            switch(RunningEngine.CurrentRoom) {
+                case "grass-world":
+                    if(X >= 32 + 29 * 64 && Y > 32 + 29 * 64) {
+                        RunningEngine.CurrentRoom = "air-world";
+                        VSpeed = 0;
+                        X = 32 + 3.5f * 64;
+                        Y = 64;
+                    }
+                    break;
+                
+                case "air-world":
+                    if(X < 64 && (Y < 32 + 13 * 64 && Y > 32 + 9 * 64)) {
+                        RunningEngine.CurrentRoom = "grass-world";
+                        VSpeed = 0;
+                        X = 32 + 28 * 64;
+                        Y = 32 + 20 * 64;
+                    }
+                    break;
+                
+                default:
+                    break;
             }
         }
 
