@@ -77,8 +77,8 @@ namespace NewSuperChunks {
                 SpriteIndex.Smooth = false;
 
                 (other as Player).Punched = false;
-                other.HSpeed = Math.Sign(other.ImageScaleX) * Math.Abs(other.HSpeed);
-                other.VSpeed = -600;
+                other.X -= Math.Sign(other.ImageScaleX) * 112;
+                other.VSpeed = -300;
             }
         }
     }
