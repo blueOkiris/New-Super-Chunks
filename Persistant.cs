@@ -330,7 +330,7 @@ namespace NewSuperChunks {
                     } else if(X > 32 + 15 * 64 && X < 32 + 18 * 64 && Y > 32 + 19 * 64) {
                         RunningEngine.CurrentRoom = "water-world";
                         X = 15 * 64;
-                        Y = 32 + 2 * 64;
+                        Y = 32 + 64;
                     }
                     break;
                 

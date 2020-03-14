@@ -1,8 +1,10 @@
 new GameRoom(
     new List<GameObject>() {
         // Room transition at top of room
-        new BoundaryBlock(32 + 16 * 64, 19 * 64, BlockType.Bottom),
-        new BoundaryBlock(32 + 17 * 64, 19 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 13 * 64, 64, BlockType.Top),
+        new BoundaryBlock(32 + 14 * 64, 64, BlockType.Top),
+        new BoundaryBlock(32 + 15 * 64, 64, BlockType.Top),
+        new BoundaryBlock(32 + 16 * 64, 64, BlockType.Top),
 
         // Going down into the cave
         new WaterBlock(32,          32, BlockType.Middle),
