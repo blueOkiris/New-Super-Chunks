@@ -621,8 +621,8 @@ new GameRoom(
         new WaterBlock(32 + 28 * 64,    32 + 16 * 64, BlockType.Middle),
         new WaterBlock(32 + 29 * 64,    32 + 16 * 64, BlockType.Middle),
         new WaterBlock(32 + 30 * 64,    32 + 16 * 64, BlockType.Right),
-        new Water(32 + 31 * 64,         32 + 16 * 64),
-        new Water(32 + 32 * 64,         32 + 16 * 64),
+        new Water(32 + 31 * 64,         17 * 64),
+        new Water(32 + 32 * 64,         17 * 64),
         new WaterBlock(32 + 33 * 64,    32 + 16 * 64, BlockType.Left),
         
         new WaterBlock(32,              32 + 17 * 64, BlockType.Right),
