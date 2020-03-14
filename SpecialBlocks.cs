@@ -186,10 +186,10 @@ namespace NewSuperChunks {
             Tag = "Water";
             Depth = 2;
 
-            MaskX = -32;
-            MaskY = -32;
-            MaskWidth = 64;
-            MaskHeight = 64;
+            MaskX = -30;
+            MaskY = -30;
+            MaskWidth = 60;
+            MaskHeight = 60;
 
             SpriteIndex = new EksedraSprite(RunningEngine.Images["water"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;

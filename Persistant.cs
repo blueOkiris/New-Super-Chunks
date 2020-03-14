@@ -442,6 +442,9 @@ namespace NewSuperChunks {
                 if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + 1, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     Y -= VSpeed * deltaTime;
                     VSpeed = 0;
+                } else if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + 1, this, typeof(JumpThrough), (self, otra) => true, ref other)) {
+                    Y -= VSpeed * deltaTime;
+                    VSpeed = 0;
                 }
 
                 if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y - 1, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
