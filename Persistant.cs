@@ -327,6 +327,18 @@ namespace NewSuperChunks {
                         VSpeed = 0;
                         X = 32 + 28 * 64;
                         Y = 32 + 20 * 64;
+                    } else if(X > 32 + 15 * 64 && X < 32 + 18 * 64 && Y > 32 + 19 * 64) {
+                        RunningEngine.CurrentRoom = "water-world";
+                        X = 15 * 64;
+                        Y = 32 + 2 * 64;
+                    }
+                    break;
+                
+                case "water-world":
+                    if(X > 32 + 12 * 64 && X < 32 + 17 * 64 && Y < 32) {
+                        RunningEngine.CurrentRoom = "air-world";
+                        X = 17 * 64;
+                        Y = 32 + 18 * 64;
                     }
                     break;
                 
@@ -363,7 +375,6 @@ namespace NewSuperChunks {
             
             if(RunningEngine.CheckCollision(X, Y, this, typeof(Water), (self, otra) => true, ref other)) {
                 if(!IsSwimming) {
-                    Y += 64;
                     Splash.ImageIndex = 0;
                     Timers[1] = 0.25f;
                 }
@@ -386,43 +397,46 @@ namespace NewSuperChunks {
                 HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
             else if(!CanPunch)
                 HSpeed = Math.Sign(ImageScaleX) * MoveSpeed;
-
-            // Horizontal collision
-            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                X = other.X + other.MaskX - (MaskX + MaskWidth);
-                HSpeed = 0;
-            }
-            
-            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
-                    (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
-                                    && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
-                X = other.X + other.MaskX + other.MaskWidth - MaskX;
-                HSpeed = 0;
-            }
             
             if(IsClimbing || IsSwimming) {
-                if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
-                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
-                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
-                    VSpeed = 0;
-                } else if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(JumpThrough),
-                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
-                    Y = other.Y + other.MaskY - (MaskY + MaskHeight);
-                    VSpeed = 0;
+                //Console.WriteLine("Swimming!");
+                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    X -= HSpeed * deltaTime;
+                    HSpeed = 0;
                 }
                 
-                if(VSpeed < 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid), 
-                        (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight 
-                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
-                    Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
+                if(HSpeed < 0 && RunningEngine.CheckCollision(X - 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    X -= HSpeed * deltaTime;
+                    HSpeed = 0;
+                }
+                
+                if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + 1, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y -= VSpeed * deltaTime;
+                    VSpeed = 0;
+                }
+
+                if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y - 1, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    Y -= VSpeed * deltaTime;
                     VSpeed = 0;
                 }
             } else {
                 // Work differently for proper landing
+                // Horizontal collision
+                if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                        (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    X = other.X + other.MaskX - (MaskX + MaskWidth);
+                    HSpeed = 0;
+                }
+                
+                if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                        (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
+                                        && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                    //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
+                    X = other.X + other.MaskX + other.MaskWidth - MaskX;
+                    HSpeed = 0;
+                }
+
                 if(VSpeed > 0 && RunningEngine.CheckCollision(X - Math.Sign(ImageScaleX) * 1, Y + VSpeed * deltaTime, this, typeof(Solid),
                         (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY 
                                         && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {

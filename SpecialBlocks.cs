@@ -133,6 +133,40 @@ namespace NewSuperChunks {
         }
     }
 
+    public class FakeWater : GameObject {
+        public override void EarlyUpdate(float deltaTime) {}
+        public override void Update(float deltaTime) {}
+        public override void LateUpdate(float deltaTime) {}
+        public override void OnCollision(GameObject other) {}
+        public override void OnKeyDown(bool[] keyState) {}
+        public override void OnKeyHeld(bool[] keyState) {}
+        public override void OnKeyOff(bool[] keyState) {}
+        public override void OnKeyUp(bool[] keyState) {}
+        public override void OnTimer(int timerIndex) {}
+
+        public FakeWater(int x, int y) {
+            X = x;
+            Y = y;
+        }
+
+        public override void Init() {
+            Tag = "Water";
+            Depth = 2;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 64;
+
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["water"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex.Smooth = false;
+        }
+
+        public override void Draw(RenderTarget target, RenderStates states) {
+            target.Draw(SpriteIndex);
+        }
+    }
+
     public class Water : GameObject {
         public override void EarlyUpdate(float deltaTime) {}
         public override void Update(float deltaTime) {}
