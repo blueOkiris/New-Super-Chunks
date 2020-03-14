@@ -381,14 +381,17 @@ namespace NewSuperChunks {
 
                 IsSwimming = true;
             } else if(IsSwimming && !IsClimbing) {
-                VSpeed -= JumpSpeed / 2;
+                if(VSpeed < 0)
+                    VSpeed -= JumpSpeed / 2;
                 IsSwimming = false;
                 Splash.ImageIndex = 0;
                 Timers[1] = 0.25f;
             }
-
-            if(IsSwimming)
+ 
+            if(IsSwimming) {
                 CanPunch = true;
+                DoubleJumped = false;
+            }
 
             if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing && !IsSwimming)
                 VSpeed += Gravity * deltaTime;
