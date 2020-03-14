@@ -42,7 +42,7 @@ namespace NewSuperChunks {
         public override void Update(float deltaTime) {
             if(RunningEngine.CurrentRoom == "title" && RunningEngine.Audio["Chunks-Title"].Status != SoundStatus.Playing) {
                 RunningEngine.Audio["Chunks-Title"].Loop = true;
-                RunningEngine.Audio["Chunks-Title"].Volume = 50;
+                RunningEngine.Audio["Chunks-Title"].Volume = 40;
                 RunningEngine.Audio["Chunks-Title"].Play();
             } else if(RunningEngine.CurrentRoom != "title") {
                 RunningEngine.Audio["Chunks-Title"].Loop = false;
@@ -51,11 +51,29 @@ namespace NewSuperChunks {
             
             if(RunningEngine.CurrentRoom == "grass-world" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
-                RunningEngine.Audio["Chunks-Intro-Level"].Volume = 50;
+                RunningEngine.Audio["Chunks-Intro-Level"].Volume = 75;
                 RunningEngine.Audio["Chunks-Intro-Level"].Play();
             } else if(RunningEngine.CurrentRoom != "grass-world") {
                 RunningEngine.Audio["Chunks-Intro-Level"].Loop = false;
                 RunningEngine.Audio["Chunks-Intro-Level"].Stop();
+            }
+
+            if(RunningEngine.CurrentRoom == "air-world" && RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Status != SoundStatus.Playing) {
+                RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Loop = true;
+                RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Volume = 75;
+                RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Play();
+            } else if(RunningEngine.CurrentRoom != "air-world") {
+                RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Loop = false;
+                RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Stop();
+            }
+
+            if(RunningEngine.CurrentRoom == "water-world" && RunningEngine.Audio["Groovin"].Status != SoundStatus.Playing) {
+                RunningEngine.Audio["Groovin"].Loop = true;
+                RunningEngine.Audio["Groovin"].Volume = 50;
+                RunningEngine.Audio["Groovin"].Play();
+            } else if(RunningEngine.CurrentRoom != "water-world") {
+                RunningEngine.Audio["Groovin"].Loop = false;
+                RunningEngine.Audio["Groovin"].Stop();
             }
 
             switch(RunningEngine.CurrentRoom) {
@@ -68,6 +86,10 @@ namespace NewSuperChunks {
                     RunningEngine.Background = new Color(235, 226, 143);
                     break;
 
+                case "water-world":
+                    RunningEngine.Background = new Color(120, 120, 120);
+                    break;
+
                 default:
                     RunningEngine.Background = Color.Yellow;
                     break;
@@ -76,8 +98,12 @@ namespace NewSuperChunks {
             if(Mouse.IsButtonPressed(Mouse.Button.Left)) {
                 //Console.WriteLine("CLICK!");
                 Vector2i mousePos = Mouse.GetPosition() - RunningEngine.GetWindow().Position;
-                if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
-                        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128) {
+                //if(mousePos.X > 1280 / 4 + 64 && mousePos.X < 1280 / 4 + 576
+                //        && mousePos.Y > (3 * 720 / 4) - 256 && mousePos.Y < (3 * 720 / 4) - 128) {
+                float centerX = RunningEngine.ViewPort.Left + RunningEngine.ViewPort.Width / 2;
+                float centerY = RunningEngine.ViewPort.Top + RunningEngine.ViewPort.Height / 2;
+                if(mousePos.X > centerX - 172 && mousePos.X < centerX + 172
+                        && mousePos.Y > centerY - 160 && mousePos.Y < centerY - 80) {
                     RunningEngine.FindGameObjectsWithTag("Player")[0].X = 32 + 64 * 9.5f;
                     RunningEngine.FindGameObjectsWithTag("Player")[0].Y = 27 * 64;
                     RunningEngine.CurrentRoom = "grass-world";
@@ -322,11 +348,11 @@ namespace NewSuperChunks {
                     break;
                 
                 case "air-world":
-                    if(X < 64 && (Y < 32 + 13 * 64 && Y > 32 + 9 * 64)) {
+                    if(X < 32 && (Y < 32 + 13 * 64 && Y > 32 + 9 * 64)) {
                         RunningEngine.CurrentRoom = "grass-world";
                         VSpeed = 0;
-                        X = 32 + 28 * 64;
-                        Y = 32 + 20 * 64;
+                        X = 32 + 29 * 64;
+                        Y = 32 + 21 * 64;
                     } else if(X > 32 + 15 * 64 && X < 32 + 18 * 64 && Y > 32 + 19 * 64) {
                         RunningEngine.CurrentRoom = "water-world";
                         X = 15 * 64;

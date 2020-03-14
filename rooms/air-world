@@ -455,7 +455,7 @@ new GameRoom(
         new Water(32 + 20 * 64, 32 + 15 * 64),
         new Water(32 + 21 * 64, 32 + 15 * 64),
         new Water(32 + 22 * 64, 32 + 15 * 64),
-        new FakeWater(32 + 23 * 64, 32 + 17 * 64),
+        new FakeWater(32 + 23 * 64, 32 + 15 * 64),
 
         new FakeWater(32 + 12 * 64, 32 + 16 * 64),
         new Water(32 + 13 * 64, 32 + 16 * 64),
@@ -469,7 +469,7 @@ new GameRoom(
         new Water(32 + 21 * 64, 32 + 16 * 64),
         new Water(32 + 22 * 64, 32 + 16 * 64),
         new Water(32 + 23 * 64, 32 + 16 * 64),
-        new FakeWater(32 + 24 * 64, 32 + 17 * 64),
+        new FakeWater(32 + 24 * 64, 32 + 16 * 64),
 
         new FakeWater(32 + 11 * 64, 32 + 17 * 64),
         new Water(32 + 12 * 64, 32 + 17 * 64),
