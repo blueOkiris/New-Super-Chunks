@@ -429,12 +429,12 @@ namespace NewSuperChunks {
             
             if(IsClimbing || IsSwimming) {
                 //Console.WriteLine("Swimming!");
-                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 2, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     X -= HSpeed * deltaTime;
                     HSpeed = 0;
                 }
                 
-                if(HSpeed < 0 && RunningEngine.CheckCollision(X - 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                if(HSpeed < 0 && RunningEngine.CheckCollision(X - 2, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     X -= HSpeed * deltaTime;
                     HSpeed = 0;
                 }

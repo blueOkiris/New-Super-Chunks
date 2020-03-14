@@ -39,6 +39,7 @@ namespace NewSuperChunks
                                     typeof(BlockType),
                                     typeof(BoundaryBlock),
                                     typeof(LadderBlock),
+                                    typeof(WaterPlatform),
                                     typeof(Water),
                                 }, "NewSuperChunks", loadSprite);
 

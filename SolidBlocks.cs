@@ -272,4 +272,26 @@ namespace NewSuperChunks {
             MaskHeight = 9;
         }
     }
+
+    public class WaterPlatform : JumpThrough {
+        public WaterPlatform(int x, int y) : base() {
+            X = x;
+            Y = y;
+        }
+        
+        public override void Init() {
+            Tag = "WaterPlatform";
+            Depth = 1;
+
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["water-platform"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex.Smooth = false;
+            ImageSpeed = 0;
+            ImageIndex = 0;
+
+            MaskX = -32;
+            MaskY = -32;
+            MaskWidth = 64;
+            MaskHeight = 9;
+        }
+    }
 }

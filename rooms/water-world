@@ -918,6 +918,7 @@ new GameRoom(
         new WaterBlock(32 + 33 * 64,    32 + 25 * 64, BlockType.Left),
         new WaterBlock(32,              32 + 25 * 64, BlockType.Right),
         
+        new WaterBlock(32,              32 + 26 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 26 * 64, BlockType.Single),
         new WaterBlock(32 + 3 * 64,     32 + 26 * 64, BlockType.Left),
         new WaterBlock(32 + 4 * 64,     32 + 26 * 64, BlockType.Right),
@@ -927,6 +928,7 @@ new GameRoom(
         new Water(32 + 32 * 64,         32 + 26 * 64),
         new WaterBlock(32 + 33 * 64,    32 + 26 * 64, BlockType.Left),
         
+        new WaterBlock(32,              32 + 27 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 27 * 64, BlockType.Single),
         new WaterBlock(32 + 3 * 64,     32 + 27 * 64, BlockType.BottomLeft),
         new WaterBlock(32 + 4 * 64,     32 + 27 * 64, BlockType.BottomRight),
@@ -936,6 +938,7 @@ new GameRoom(
         new Water(32 + 32 * 64,         32 + 27 * 64),
         new WaterBlock(32 + 33 * 64,    32 + 27 * 64, BlockType.Left),
         
+        new WaterBlock(32,              32 + 28 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 28 * 64, BlockType.Single),
         new Water(32 + 29 * 64,         32 + 28 * 64),
         new Water(32 + 30 * 64,         32 + 28 * 64),
@@ -943,6 +946,7 @@ new GameRoom(
         new Water(32 + 32 * 64,         32 + 28 * 64),
         new WaterBlock(32 + 33 * 64,    32 + 28 * 64, BlockType.Left),
         
+        new WaterBlock(32,              32 + 29 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 29 * 64, BlockType.Single),
         new Water(32 + 29 * 64,         32 + 29 * 64),
         new Water(32 + 30 * 64,         32 + 29 * 64),
@@ -951,6 +955,7 @@ new GameRoom(
         new WaterBlock(32 + 32 * 64,    32 + 29 * 64, BlockType.TopLeft),
         new WaterBlock(32 + 33 * 64,    32 + 29 * 64, BlockType.Middle),
         
+        new WaterBlock(32,              32 + 30 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 30 * 64, BlockType.Single),
         new WaterBlock(32 + 3 * 64,     32 + 30 * 64, BlockType.TopLeft),
         new WaterBlock(32 + 4 * 64,     32 + 30 * 64, BlockType.TopRight),
@@ -961,8 +966,9 @@ new GameRoom(
         new WaterBlock(32 + 32 * 64,    32 + 30 * 64, BlockType.Middle),
         new WaterBlock(32 + 33 * 64,    32 + 30 * 64, BlockType.Middle),
         
+        new WaterBlock(32,              32 + 31 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 31 * 64, BlockType.Single),
-        new WaterBlock(32 + 3 * 64,     32 + 31 * 64, BlockType.Middle),
+        new WaterBlock(32 + 3 * 64,     32 + 31 * 64, BlockType.Left),
         new WaterBlock(32 + 4 * 64,     32 + 31 * 64, BlockType.Middle),
         new WaterBlock(32 + 5 * 64,     32 + 31 * 64, BlockType.TopRight),
         new Water(32 + 29 * 64,         32 + 31 * 64),
@@ -972,8 +978,9 @@ new GameRoom(
         new WaterBlock(32 + 32 * 64,    32 + 31 * 64, BlockType.Middle),
         new WaterBlock(32 + 33 * 64,    32 + 31 * 64, BlockType.Middle),
 
+        new WaterBlock(32,              32 + 32 * 64, BlockType.Right),
         new WaterBlock(32 + 2 * 64,     32 + 32 * 64, BlockType.Single),
-        new WaterBlock(32 + 3 * 64,     32 + 32 * 64, BlockType.Middle),
+        new WaterBlock(32 + 3 * 64,     32 + 32 * 64, BlockType.Left),
         new WaterBlock(32 + 4 * 64,     32 + 32 * 64, BlockType.Middle),
         new WaterBlock(32 + 5 * 64,     32 + 32 * 64, BlockType.Middle),
         new WaterBlock(32 + 6 * 64,     32 + 32 * 64, BlockType.Top),
@@ -1004,6 +1011,43 @@ new GameRoom(
         new WaterBlock(32 + 31 * 64,    32 + 32 * 64, BlockType.Middle),
         new WaterBlock(32 + 32 * 64,    32 + 32 * 64, BlockType.Middle),
         new WaterBlock(32 + 33 * 64,    32 + 32 * 64, BlockType.Middle),
+
+        // Platforms
+        new WaterBlock(32 + 13 * 64,    32 + 10 * 64, BlockType.Single),
+        new WaterBlock(32 + 14 * 64,    32 + 10 * 64, BlockType.Single),
+        new WaterBlock(32 + 15 * 64,    32 + 10 * 64, BlockType.Single),
+        new WaterBlock(32 + 16 * 64,    32 + 10 * 64, BlockType.Single),
+
+        new WaterPlatform(32 + 32 * 64, 13 * 64),
+        new WaterPlatform(32 + 31 * 64, 32 + 14 * 64),
+        new WaterPlatform(32 + 32 * 64, 16 * 64),
+
+        new WaterPlatform(32 + 23 * 64, 32 + 31 * 64),
+        new WaterPlatform(32 + 24 * 64, 32 + 31 * 64),
+        new WaterPlatform(32 + 23 * 64, 32 + 30 * 64),
+        new WaterPlatform(32 + 24 * 64, 32 + 30 * 64),
+        new WaterPlatform(32 + 23 * 64, 32 + 29 * 64),
+        new WaterPlatform(32 + 24 * 64, 32 + 29 * 64),
+        new Water(32 + 20 * 64,         32 + 27 * 64),
+        new Water(32 + 21 * 64,         32 + 27 * 64),
+        new Water(32 + 22 * 64,         32 + 27 * 64),
+        new Water(32 + 20 * 64,         32 + 28 * 64),
+        new Water(32 + 21 * 64,         32 + 28 * 64),
+        new Water(32 + 22 * 64,         32 + 28 * 64),
+        new WaterPlatform(32 + 18 * 64, 32 + 27 * 64),
+        new WaterPlatform(32 + 19 * 64, 32 + 27 * 64),
+
+        new WaterPlatform(32 + 5 * 64,  32 + 29 * 64),
+        new WaterPlatform(32 + 6 * 64,  32 + 28 * 64),
+        new WaterPlatform(32 + 7 * 64,  32 + 27 * 64),
+        new Water(32 + 8 * 64,          32 + 27 * 64),
+        new Water(32 + 9 * 64,          32 + 27 * 64),
+        new Water(32 + 10 * 64,         32 + 27 * 64),
+        new Water(32 + 8 * 64,          32 + 28 * 64),
+        new Water(32 + 9 * 64,          32 + 28 * 64),
+        new Water(32 + 10 * 64,         32 + 28 * 64),
+        new WaterBlock(32 + 11 * 64,    32 + 28 * 64, BlockType.Single),
+        new WaterBlock(32 + 12 * 64,    32 + 28 * 64, BlockType.Single),
     },
     new Vector2f(34 * 64, 33 * 64)
 )
