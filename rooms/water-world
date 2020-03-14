@@ -1050,7 +1050,7 @@ new GameRoom(
         new WaterBlock(32 + 12 * 64,    32 + 27 * 64, BlockType.Single),
 
         // Room exit
-        new BoundaryBlock(32 + 64, 31 * 64, BlockType.Bottom),
+        new BoundaryBlock(32 + 64, 32 * 64, BlockType.Bottom),
     },
     new Vector2f(34 * 64, 33 * 64)
 )
