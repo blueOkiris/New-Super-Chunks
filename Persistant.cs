@@ -49,13 +49,13 @@ namespace NewSuperChunks {
                 RunningEngine.Audio["Chunks-Title"].Stop();
             }
             
-            if(RunningEngine.CurrentRoom == "grass-world" && RunningEngine.Audio["Chunks-Intro-Level"].Status != SoundStatus.Playing) {
-                RunningEngine.Audio["Chunks-Intro-Level"].Loop = true;
-                RunningEngine.Audio["Chunks-Intro-Level"].Volume = 75;
-                RunningEngine.Audio["Chunks-Intro-Level"].Play();
+            if(RunningEngine.CurrentRoom == "grass-world" && RunningEngine.Audio["chunks-grass"].Status != SoundStatus.Playing) {
+                RunningEngine.Audio["chunks-grass"].Loop = true;
+                RunningEngine.Audio["chunks-grass"].Volume = 75;
+                RunningEngine.Audio["chunks-grass"].Play();
             } else if(RunningEngine.CurrentRoom != "grass-world") {
-                RunningEngine.Audio["Chunks-Intro-Level"].Loop = false;
-                RunningEngine.Audio["Chunks-Intro-Level"].Stop();
+                RunningEngine.Audio["chunks-grass"].Loop = false;
+                RunningEngine.Audio["chunks-grass"].Stop();
             }
 
             if(RunningEngine.CurrentRoom == "air-world" && RunningEngine.Audio["ES_Chefs_From_Europe_2_-_Magnus_Ringblom"].Status != SoundStatus.Playing) {
