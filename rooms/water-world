@@ -1051,6 +1051,11 @@ new GameRoom(
 
         // Room exit
         new BoundaryBlock(32 + 64, 32 * 64, BlockType.Bottom),
+
+        // Boxes
+        new Box(32 + 64, 32 + 12 * 64),
+
+        new Box(32 + 31 * 64, 13 * 64),
     },
     new Vector2f(34 * 64, 33 * 64)
 )

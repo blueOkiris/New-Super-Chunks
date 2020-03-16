@@ -82,12 +82,28 @@ namespace NewSuperChunks {
             MaskWidth = 64;
             MaskHeight = 64;
 
-            SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(0, 0, 64, 64) });
+              SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             SpriteIndex.Smooth = false;
         }
 
+        public override void Update(float deltaTime) {
+            GameObject player = null;
+            if(RunningEngine.CheckCollision(X, Y - 1, this, typeof(Player), (self, otra) => true, ref player)) {
+                if((player as Player).Pounded && BlockPosition != BlockType.PassThrough) {
+                    BlockPosition = BlockType.PassThrough;
+                    SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(128, 0, 64, 64) });
+                    SpriteIndex.Smooth = false;
+
+                    (player as Player).Pounded = false;
+                    
+                    player.VSpeed = -300;
+                }
+            }
+        }
+ 
         public override void OnCollision(GameObject other) {
-            if(other.Tag == "Player" && (other as Player).Punched && BlockPosition != BlockType.PassThrough) {
+              if(other.Tag == "Player" && (other as Player).Punched && BlockPosition != BlockType.PassThrough
+                    && (other.Y + other.MaskY + other.MaskHeight > Y + MaskY && other.Y + other.MaskY < Y + MaskY + MaskHeight)) {
                 BlockPosition = BlockType.PassThrough;
                 SpriteIndex = new EksedraSprite(RunningEngine.Images["box"], new IntRect[] { new IntRect(64, 0, 64, 64) });
                 SpriteIndex.Smooth = false;

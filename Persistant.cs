@@ -127,7 +127,7 @@ namespace NewSuperChunks {
                 float centerX = RunningEngine.ViewPort.Left + RunningEngine.ViewPort.Width / 2;
                 float centerY = RunningEngine.ViewPort.Top + RunningEngine.ViewPort.Height / 2;
                 if(mousePos.X > centerX - 172 && mousePos.X < centerX + 172
-                        && mousePos.Y > centerY - 160 && mousePos.Y < centerY - 80)
+                        && mousePos.Y > centerY - 160 + 32 && mousePos.Y < centerY - 80 + 32)
                     target.Draw(PlayButtonOn);
                 else
                     target.Draw(PlayButtonOff);
@@ -144,10 +144,14 @@ namespace NewSuperChunks {
         private float JumpSpeed = 900;
         private bool IsGrounded = false;
 
-        private bool DoubleJumpUnlocked, PunchUnlocked;
+        private bool DoubleJumpUnlocked, PunchUnlocked, PoundUnlocked;
+
         private bool DoubleJumped = false, CanPunch = true;
         public bool Punched = false;                            // Public so it can break blocks
         private float PunchTime = 0.175f, PunchSpeed = 1800;
+
+        public bool Pounded = false;
+        private float PoundSpeed = 1800;
 
         private bool IsClimbing = false, IsSwimming = false;
 
@@ -155,7 +159,7 @@ namespace NewSuperChunks {
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnCollision(GameObject other) {}
 
-        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone, PlayerClimb, PlayerSwim;
+        private EksedraSprite PlayerStand, PlayerJump, PlayerFall, PlayerRun, PlayerSuperJump, PlayerPunch, PlayerPunchDone, PlayerClimb, PlayerSwim, PlayerPound;
         private EksedraSprite Splash;
 
         public Player(int x, int y) {
@@ -211,6 +215,10 @@ namespace NewSuperChunks {
                                                 new IntRect(220, 76, 64, 64),
                                             });
             PlayerSwim.Smooth = false;
+            PlayerPound = new EksedraSprite(RunningEngine.Images["spr_chunks"], new IntRect[] {
+                                                new IntRect(580, 76, 64, 64)
+                                            });
+            PlayerPound.Smooth = false;
 
             Splash = new EksedraSprite(RunningEngine.Images["splash"], new IntRect[] {
                                                 new IntRect(0, 0, 64, 64),
@@ -241,6 +249,7 @@ namespace NewSuperChunks {
             // All false when game is done
             DoubleJumpUnlocked = true;
             PunchUnlocked = true;
+            PoundUnlocked = true;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
@@ -289,6 +298,12 @@ namespace NewSuperChunks {
 
                 if(Punched)
                     SpriteIndex = PlayerPunch;
+                else if(Pounded) {
+                    SpriteIndex = PlayerPound;
+
+                    if(IsGrounded)
+                        Pounded = false;
+                }
                 else if(IsGrounded) {
                     SpriteIndex = Math.Abs(HSpeed) > 0 ? PlayerRun : PlayerStand;
 
@@ -303,7 +318,6 @@ namespace NewSuperChunks {
                 ImageScaleX = Math.Abs(ImageScaleX);
             else if(HSpeed < 0 && CanPunch)
                 ImageScaleX = -Math.Abs(ImageScaleX);
-            
             
             if(RunningEngine.CurrentRoom == "title")
                 SpriteIndex = PlayerRun;
@@ -322,6 +336,9 @@ namespace NewSuperChunks {
                 RunningEngine.ViewPort.Top = RunningEngine.GetRoomSize().Y - RunningEngine.ViewPort.Height;
             else
                 RunningEngine.ViewPort.Top = Y - RunningEngine.ViewPort.Height / 2;
+
+            if(Pounded)
+                VSpeed = PoundSpeed;
 
             // Room transitions
             switch(RunningEngine.CurrentRoom) {
@@ -404,10 +421,13 @@ namespace NewSuperChunks {
             if(IsSwimming) {
                 CanPunch = true;
                 DoubleJumped = false;
+                Pounded = false;
             }
 
-            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing && !IsSwimming)
+            if(VSpeed < MaxVSpeed && !IsGrounded && !Punched && !IsClimbing && !IsSwimming && !Pounded)
                 VSpeed += Gravity * deltaTime;
+            else if(Pounded)
+                VSpeed = PunchSpeed;
 
             if(Punched)
                 HSpeed = Math.Sign(ImageScaleX) * PunchSpeed;
@@ -416,12 +436,12 @@ namespace NewSuperChunks {
             
             if(IsClimbing || IsSwimming) {
                 //Console.WriteLine("Swimming!");
-                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 2, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     X -= HSpeed * deltaTime;
                     HSpeed = 0;
                 }
                 
-                if(HSpeed < 0 && RunningEngine.CheckCollision(X - 2, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
+                if(HSpeed < 0 && RunningEngine.CheckCollision(X - 1, Y, this, typeof(Solid), (self, otra) => (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     X -= HSpeed * deltaTime;
                     HSpeed = 0;
                 }
@@ -441,14 +461,14 @@ namespace NewSuperChunks {
             } else {
                 // Work differently for proper landing
                 // Horizontal collision
-                if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                if(HSpeed > 0 && RunningEngine.CheckCollision(X + 2, Y - 0.1f, this, typeof(Solid),
                         (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
                                         && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     X = other.X + other.MaskX - (MaskX + MaskWidth);
                     HSpeed = 0;
                 }
                 
-                if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Solid),
+                if(HSpeed < 0 && RunningEngine.CheckCollision(X -2, Y - 0.1f, this, typeof(Solid),
                         (self, otra) => self.Y < otra.Y + otra.MaskY + otra.MaskHeight 
                                         && (otra as Solid).BlockPosition != BlockType.PassThrough, ref other)) {
                     //Console.WriteLine("Left Side: " + (Y + MaskY + MaskHeight) + " > Right Side: " + (other.Y + other.MaskY - 1));
@@ -490,23 +510,28 @@ namespace NewSuperChunks {
             }
 
             if(!IsClimbing && !IsSwimming) {
-                if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch) {
+                if(keyState[(int) Keyboard.Key.Up] && IsGrounded && CanPunch && !Pounded) {
                         VSpeed = -JumpSpeed;
                         IsGrounded = false;
 
                         RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
-                } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped && CanPunch) {
+                } else if(keyState[(int) Keyboard.Key.Up] && !IsGrounded && DoubleJumpUnlocked && !DoubleJumped && CanPunch && !Pounded) {
                     VSpeed = -JumpSpeed * 1.5f;
                     DoubleJumped = true;
                     RunningEngine.Audio["270337__littlerobotsoundfactory__pickup-00"].Play();
                 }
             }
 
-            if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch && !IsSwimming) {
+            if(keyState[(int) Keyboard.Key.Space] && PunchUnlocked && !Punched && CanPunch && !IsSwimming && !Pounded) {
                 Timers[0] = PunchTime;
                 Punched = true;
                 CanPunch = false;
                 IsClimbing = false;
+                RunningEngine.Audio["270327__littlerobotsoundfactory__hit-00"].Play();
+            }
+
+            if(keyState[(int) Keyboard.Key.Down] && !Pounded && PoundUnlocked && !IsSwimming && !IsClimbing && !IsGrounded) {
+                Pounded = true;
                 RunningEngine.Audio["270310__littlerobotsoundfactory__explosion-04"].Play();
             }
         }
